@@ -10,6 +10,7 @@ public abstract class Option<T> {
     abstract public T getOrElse(T other);
     abstract public T orNull();
     abstract public <R> Option<R> map(Transformer<T, R> transformer);
+    abstract public void foreach(Handler<T> handler);
     abstract public Option<T> filter(Predicate<T> predicate);
     abstract public <M extends T, O> Option<O> collect(Matcher<M, ? extends O>... matchers);
 
@@ -63,6 +64,11 @@ public abstract class Option<T> {
         }
 
         @Override
+        public void foreach(Handler<T> handler) {
+            handler.apply(value);
+        }
+
+        @Override
         public Option<T> filter(Predicate<T> predicate) {
             return predicate.matches(value) ? new Some<T>(value) : new None<T>();
         }
@@ -109,6 +115,11 @@ public abstract class Option<T> {
         @Override
         public <R> Option<R> map(Transformer<T, R> transformer) {
             return new None<R>();
+        }
+
+        @Override
+        public void foreach(Handler<T> handler) {
+
         }
 
         @Override

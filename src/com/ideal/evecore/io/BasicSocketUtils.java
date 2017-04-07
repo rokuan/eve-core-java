@@ -39,7 +39,7 @@ public abstract class BasicSocketUtils {
         os.flush();
     }
 
-    protected int readSize() throws IOException {
+    private final int readSize() throws IOException {
         byte[] data = new byte[4];
         if (is.read(data) == 4) {
             int sum = 0;
