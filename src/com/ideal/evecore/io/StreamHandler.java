@@ -1,9 +1,11 @@
 package com.ideal.evecore.io;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ideal.evecore.io.command.UserCommand;
+import com.ideal.evecore.io.command.user.UserCommand;
+import com.ideal.evecore.util.Pair;
 import com.ideal.evecore.util.PendingAtomicReference;
-import com.sun.tools.javac.util.Pair;
+import com.ideal.evecore.util.Result;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -14,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public class StreamHandler extends StreamUtils implements Runnable {
     public static final int COMMAND = 0;
@@ -49,10 +51,13 @@ public class StreamHandler extends StreamUtils implements Runnable {
                             handleUserCommand();
                             break;
                         case BOOLEAN_RESULT:
+                            handleBooleanAnswer();
                             break;
                         case STRING_RESULT:
+                            handleStringAnswer();
                             break;
                         case OBJECT_RESULT:
+                            handleObjectAnswer();
                             break;
                     }
                 } catch (IOException e) {
@@ -128,16 +133,33 @@ public class StreamHandler extends StreamUtils implements Runnable {
         return reference.get();
     }
 
-    public <T> T resultOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {
+    public <T> Result<T> resultOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {
         String operationId = String.valueOf(stamp.getAndIncrement());
         PendingAtomicReference<String> reference = new PendingAtomicReference<String>();
         synchronized (os) {
             objectResults.put(operationId, reference);
             os.write(OBJECT_RESULT);
             writeValue(operationId);
-            writeUserCommand(mapper, command);
+            writeUserCommand(resultMapper, command);
         }
-        return resultMapper.readValue(reference.get(), clazz);
+
+        String json = reference.get();
+        JsonNode node = resultMapper.readTree(json);
+
+        if (node.get("success").asBoolean(false)) {
+            return Result.ok(resultMapper.treeToValue(node.get("value"), clazz));
+        } else {
+            return Result.ko(node.get("error").asText());
+        }
+    }
+
+    public void commandOperation(UserCommand command, ObjectMapper resultMapper) throws IOException {
+        String operationId = String.valueOf(stamp.getAndIncrement());
+        synchronized (os) {
+            os.write(COMMAND);
+            writeValue(operationId);
+            writeUserCommand(resultMapper, command);
+        }
     }
 
     public Pair<String, UserCommand> nextCommand() throws InterruptedException {

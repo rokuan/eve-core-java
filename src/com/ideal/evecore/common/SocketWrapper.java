@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public class SocketWrapper extends BasicSocketUtils {
     public SocketWrapper(Socket s) throws IOException {

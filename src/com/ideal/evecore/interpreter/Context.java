@@ -5,7 +5,7 @@ import com.ideal.evecore.interpreter.data.EveStructuredObject;
 import com.ideal.evecore.util.Option;
 
 /**
- * Created by chris on 06/04/2017.
+ * Created by Christophe on 06/04/2017.
  */
 public interface Context {
     Option<EveStructuredObject> findOneItemOfType(String type);

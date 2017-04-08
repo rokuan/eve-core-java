@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public abstract class BasicSocketUtils {
     protected final Socket socket;

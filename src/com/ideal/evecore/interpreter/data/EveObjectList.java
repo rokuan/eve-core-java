@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by chris on 06/04/2017.
+ * Created by Christophe on 06/04/2017.
  */
 public class EveObjectList implements EveObject {
     private List<EveObject> values;

@@ -1,7 +1,7 @@
 package com.ideal.evecore.util;
 
 /**
- * Created by chris on 06/04/2017.
+ * Created by Christophe on 06/04/2017.
  */
 public abstract class Matcher<T, R> {
     private Class<T> clazz;

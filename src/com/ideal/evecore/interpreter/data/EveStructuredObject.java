@@ -3,7 +3,7 @@ package com.ideal.evecore.interpreter.data;
 import com.ideal.evecore.util.Option;
 
 /**
- * Created by chris on 06/04/2017.
+ * Created by Christophe on 06/04/2017.
  */
 public interface EveStructuredObject extends EveObject {
     String getType();

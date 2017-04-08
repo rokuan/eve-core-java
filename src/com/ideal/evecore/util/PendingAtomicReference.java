@@ -3,7 +3,7 @@ package com.ideal.evecore.util;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public class PendingAtomicReference<T> extends PendingAtomicValue<T> {
     protected AtomicReference<T> value = new AtomicReference<T>();

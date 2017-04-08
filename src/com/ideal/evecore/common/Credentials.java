@@ -1,7 +1,7 @@
 package com.ideal.evecore.common;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public final class Credentials {
     private String login;

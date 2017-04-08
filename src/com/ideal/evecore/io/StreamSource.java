@@ -1,13 +1,17 @@
 package com.ideal.evecore.io;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ideal.evecore.util.Result;
 
 import java.io.IOException;
 import java.net.Socket;
 import static com.ideal.evecore.io.StreamHandler.*;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public class StreamSource extends StreamUtils {
     private String sourceId;
@@ -33,5 +37,20 @@ public class StreamSource extends StreamUtils {
         os.write(OBJECT_RESULT);
         writeValue(sourceId);
         writeItem(responseMapper, response);
+    }
+
+    public <T> void writeResultResponse(ObjectMapper responseMapper, Result<T> response) throws IOException {
+        os.write(OBJECT_RESULT);
+        writeValue(sourceId);
+        final JsonNodeFactory factory = JsonNodeFactory.instance;
+        ObjectNode value = factory.objectNode();
+        if(response.isSuccess()) {
+            value.put("success", true);
+            value.put("value", responseMapper.valueToTree(response.get()));
+        } else {
+            value.put("success", false);
+            value.put("error", response.getError().getMessage());
+        }
+        writeValue(value.toString());
     }
 }

@@ -1,7 +1,7 @@
 package com.ideal.evecore.io.command;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public abstract class AbstractCommand {
     protected final String command;

@@ -6,13 +6,17 @@ import com.ideal.evecore.util.Option;
 import com.ideal.evecore.util.Transformer;
 
 /**
- * Created by chris on 06/04/2017.
+ * Created by Christophe on 06/04/2017.
  */
 public class EveMappingObject implements EveStructuredObject {
-    private Mapping<EveObject> mapping;
+    private final Mapping<EveObject> mapping;
 
     public EveMappingObject(Mapping<EveObject> m){
         mapping = m;
+    }
+
+    public Mapping<EveObject> getValues() {
+        return mapping;
     }
 
     @Override

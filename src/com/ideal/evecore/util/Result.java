@@ -1,7 +1,7 @@
 package com.ideal.evecore.util;
 
 /**
- * Created by chris on 06/04/2017.
+ * Created by Christophe on 06/04/2017.
  */
 public abstract class Result<T> {
     abstract public boolean isSuccess();
@@ -14,6 +14,10 @@ public abstract class Result<T> {
 
     public static <T> Result<T> ko(Throwable t){
         return new Failure<T>(t);
+    }
+
+    public static <T> Result<T> ko(String error) {
+        return new Failure<T>(new Exception(error));
     }
 
     public static final class Success<T> extends Result<T> {

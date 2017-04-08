@@ -1,14 +1,13 @@
 package com.ideal.evecore.io;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ideal.evecore.io.command.UserCommand;
+import com.ideal.evecore.io.command.user.UserCommand;
 
 import java.io.IOException;
 import java.net.Socket;
 
 /**
- * Created by chris on 07/04/2017.
+ * Created by Christophe on 07/04/2017.
  */
 public abstract class StreamUtils extends BasicSocketUtils {
     protected StreamUtils(Socket s) throws IOException {
