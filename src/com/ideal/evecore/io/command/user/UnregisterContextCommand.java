@@ -12,7 +12,7 @@ public final class UnregisterContextCommand extends AbstractCommand implements U
 
     @JsonCreator
     public UnregisterContextCommand(@JsonProperty("contextId") String id) {
-        super(UNREGISRER_CONTEXT);
+        super(UNREGISTER_CONTEXT);
         contextId = id;
     }
 

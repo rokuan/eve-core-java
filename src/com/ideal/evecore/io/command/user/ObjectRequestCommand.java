@@ -9,7 +9,7 @@ import com.ideal.evecore.io.command.structured.EveStructuredObjectCommand;
 /**
  * Created by Christophe on 08/04/2017.
  */
-public final class ObjectRequestCommand extends AbstractCommand implements UserCommand{
+public final class ObjectRequestCommand extends AbstractCommand implements UserCommand {
     private final String domainId;
     private final String objectId;
     private final EveStructuredObjectCommand objectCommand;

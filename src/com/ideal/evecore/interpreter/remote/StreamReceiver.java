@@ -1,6 +1,7 @@
 package com.ideal.evecore.interpreter.remote;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ideal.evecore.common.Mapping;
 import com.ideal.evecore.interpreter.QuerySource;
 import com.ideal.evecore.interpreter.data.EveObject;
@@ -8,8 +9,9 @@ import com.ideal.evecore.interpreter.data.EveStructuredObject;
 import com.ideal.evecore.io.StreamHandler;
 import com.ideal.evecore.io.StreamSource;
 import com.ideal.evecore.io.command.receiver.*;
-import com.ideal.evecore.io.command.receiver.ReceiverCommand.*;
-import com.ideal.evecore.universe.ValueMatcher;
+import com.ideal.evecore.io.serialization.EveObjectSerialization;
+import com.ideal.evecore.io.serialization.ValueMatcherSerialization;
+import com.ideal.evecore.universe.matcher.ValueMatcher;
 import com.ideal.evecore.universe.receiver.EveObjectMessage;
 import com.ideal.evecore.universe.receiver.Receiver;
 import com.ideal.evecore.util.Option;
@@ -31,6 +33,10 @@ public class StreamReceiver extends ObjectStreamSource implements Receiver {
         receiver = r;
         // TODO: fill the mapper
         mapper = new ObjectMapper();
+        SimpleModule basicModule = new SimpleModule();
+        basicModule.addSerializer(EveObject.class, new EveObjectSerialization.EveObjectSerializer(receiverId));
+        basicModule.addSerializer(ValueMatcher.class, new ValueMatcherSerialization.ValueMatcherSerializer());
+        mapper.registerModule(basicModule);
     }
 
     public final void handleCommand(ReceiverCommand command, StreamSource source) throws IOException {

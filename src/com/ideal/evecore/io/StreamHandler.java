@@ -2,7 +2,10 @@ package com.ideal.evecore.io;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.ideal.evecore.interpreter.data.EveObject;
 import com.ideal.evecore.io.command.user.UserCommand;
+import com.ideal.evecore.io.serialization.EveObjectSerialization;
 import com.ideal.evecore.util.Pair;
 import com.ideal.evecore.util.PendingAtomicReference;
 import com.ideal.evecore.util.Result;
@@ -37,6 +40,9 @@ public class StreamHandler extends StreamUtils implements Runnable {
         super(s);
         // TODO: fill the mapper with the basic serializers/deserializers
         mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(EveObject.class, new EveObjectSerialization.EveObjectDeserializer(this));
+        mapper.registerModule(module);
     }
 
     @Override

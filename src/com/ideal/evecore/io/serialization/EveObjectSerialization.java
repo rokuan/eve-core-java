@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.ideal.evecore.common.Mapping;
 import com.ideal.evecore.interpreter.data.*;
 import com.ideal.evecore.interpreter.remote.RemoteEveStructuredObject;
+import com.ideal.evecore.io.StreamHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +34,13 @@ public class EveObjectSerialization {
             if (eveObject instanceof EveStringObject) {
                 jsonGenerator.writeString(((EveStringObject)eveObject).getValue());
             } else if (eveObject instanceof EveNumberObject) {
-                jsonGenerator.writeNumber(((EveNumberObject)eveObject).getValue().doubleValue());
+                Number value = ((EveNumberObject)eveObject).getValue();
+
+                if (value.doubleValue() == value.intValue()) {
+                    jsonGenerator.writeNumber(value.intValue());
+                } else {
+                    jsonGenerator.writeNumber(value.doubleValue());
+                }
             } else if (eveObject instanceof EveObjectList) {
                 EveObjectList objects = (EveObjectList) eveObject;
                 jsonGenerator.writeStartArray(objects.getValues().size());
@@ -44,13 +51,22 @@ public class EveObjectSerialization {
             } else if (eveObject instanceof EveBooleanObject) {
                 jsonGenerator.writeBoolean(((EveBooleanObject) eveObject).getValue());
             } else if (eveObject instanceof RemoteEveStructuredObject) {
-
+                RemoteEveStructuredObject remote = (RemoteEveStructuredObject) eveObject;
+                jsonGenerator.writeStartObject();
+                jsonGenerator.writeStringField("type", EveStructuredObjectCategory.REMOTE.name());
+                jsonGenerator.writeStringField(EveObject.DOMAIN_KEY, remote.getDomainId());
+                jsonGenerator.writeStringField(EveObject.ID_KEY, remote.getObjectId());
+                jsonGenerator.writeEndObject();
             } else if (eveObject instanceof EveQueryObject) {
                 jsonGenerator.writeStartObject();
+                jsonGenerator.writeStringField("type", EveStructuredObjectCategory.REMOTE.name());
                 jsonGenerator.writeStringField(EveObject.DOMAIN_KEY, domainId);
                 jsonGenerator.writeStringField(EveObject.ID_KEY, ((EveQueryObject)eveObject).getId());
                 jsonGenerator.writeEndObject();
             } else if (eveObject instanceof EveMappingObject) {
+                jsonGenerator.writeStartObject();
+                jsonGenerator.writeStringField("type", EveStructuredObjectCategory.MAPPING.name());
+                jsonGenerator.writeFieldName("value");
                 jsonGenerator.writeStartObject();
                 Mapping<EveObject> values = ((EveMappingObject)eveObject).getValues();
                 for(Map.Entry<String, EveObject> entry: values.entrySet()){
@@ -58,11 +74,20 @@ public class EveObjectSerialization {
                     serialize(entry.getValue(), jsonGenerator, serializerProvider);
                 }
                 jsonGenerator.writeEndObject();
+                jsonGenerator.writeEndObject();
+            } else {
+                // TODO: EveDateObject, ...
             }
         }
     }
 
     public static class EveObjectDeserializer extends JsonDeserializer<EveObject> {
+        private final StreamHandler handler;
+
+        public EveObjectDeserializer(StreamHandler h){
+            handler = h;
+        }
+
         @Override
         public EveObject deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
             switch(jsonParser.getCurrentToken()){
@@ -77,10 +102,41 @@ public class EveObjectSerialization {
                     return new EveNumberObject(jsonParser.getIntValue());
                 case START_OBJECT:
                     Mapping<EveObject> values = new Mapping<EveObject>();
+                    EveStructuredObjectCategory category = EveStructuredObjectCategory.MAPPING;
+                    String domainId = "";
+                    String objectId = "";
+
                     while(jsonParser.nextToken() != JsonToken.END_OBJECT) {
                         String field = jsonParser.nextFieldName();
-                        values.put(field, deserialize(jsonParser, deserializationContext));
+
+                        if ("type".equals(field)) {
+                            try {
+                                category = EveStructuredObjectCategory.valueOf(jsonParser.getText());
+                            } catch (Exception e) {
+
+                            }
+                        } else if ("value".equals(field)) {
+                            jsonParser.nextToken();
+                            while(jsonParser.nextToken() != JsonToken.END_OBJECT){
+                                String attribute = jsonParser.nextFieldName();
+                                values.put(attribute, deserialize(jsonParser, deserializationContext));
+                            }
+                        } else if (EveObject.DOMAIN_KEY.equals(field)) {
+                            domainId = jsonParser.getText();
+                        } else if (EveObject.ID_KEY.equals(field)) {
+                            objectId = jsonParser.getText();
+                        } else {
+                            //jsonParser.nextToken();
+                        }
                     }
+
+                    switch(category){
+                        case MAPPING:
+                            return new EveMappingObject(values);
+                        case REMOTE:
+                            return new RemoteEveStructuredObject(domainId, objectId, handler);
+                    }
+
                     return new EveMappingObject(values);
                 case START_ARRAY:
                     List<EveObject> elements = new ArrayList<EveObject>();
