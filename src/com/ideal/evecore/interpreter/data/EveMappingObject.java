@@ -3,7 +3,10 @@ package com.ideal.evecore.interpreter.data;
 import com.ideal.evecore.common.Mapping;
 import com.ideal.evecore.util.Matcher;
 import com.ideal.evecore.util.Option;
+import com.ideal.evecore.util.Pair;
 import com.ideal.evecore.util.Transformer;
+
+import java.util.HashMap;
 
 /**
  * Created by Christophe on 06/04/2017.
@@ -12,6 +15,14 @@ public class EveMappingObject implements EveStructuredObject {
     private final Mapping<EveObject> mapping;
 
     public EveMappingObject(Mapping<EveObject> m){
+        mapping = m;
+    }
+
+    public EveMappingObject(Pair<String, EveObject>... ps) {
+        Mapping<EveObject> m = new Mapping<EveObject>();
+        for (Pair<String, EveObject> pair: ps) {
+            m.put(pair.first, pair.second);
+        }
         mapping = m;
     }
 

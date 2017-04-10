@@ -131,4 +131,9 @@ public class UserConnection extends Thread {
             domain.handleObjectCommand(delegateCommand, source);
         }
     }
+
+    public void disconnect() {
+        running.set(false);
+        try { socket.close(); } catch (Exception e) {}
+    }
 }
