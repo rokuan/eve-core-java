@@ -9,7 +9,7 @@ public class PendingAtomicReference<T> extends PendingAtomicValue<T> {
     protected AtomicReference<T> value = new AtomicReference<T>();
 
     @Override
-    public void set(T t) {
+    public synchronized void set(T t) {
         value.set(t);
         modified.set(true);
         synchronized (value) {

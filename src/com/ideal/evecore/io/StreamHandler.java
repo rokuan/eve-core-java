@@ -65,6 +65,8 @@ public class StreamHandler extends StreamUtils implements Runnable {
                         case OBJECT_RESULT:
                             handleObjectAnswer();
                             break;
+                        case -1:
+                            throw new IOException("Client has disconnected");
                     }
                 } catch (IOException e) {
                     running.set(false);
@@ -84,10 +86,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         boolean value = readTest();
         PendingAtomicReference<Boolean> reference = booleanResults.remove(requestId);
         if (reference != null) {
-            synchronized (reference) {
-                reference.set(value);
-                reference.notify();
-            }
+            reference.set(value);
         }
     }
 
@@ -96,10 +95,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         String value = readValue();
         PendingAtomicReference<String> reference = stringResults.remove(requestId);
         if (reference != null) {
-            synchronized (reference) {
-                reference.set(value);
-                reference.notify();
-            }
+            reference.set(value);
         }
     }
 
@@ -108,10 +104,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         String json = readValue();
         PendingAtomicReference<String> reference = objectResults.remove(requestId);
         if (reference != null) {
-            synchronized (reference) {
-                reference.set(json);
-                reference.notify();
-            }
+            reference.set(json);
         }
     }
 
@@ -132,7 +125,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         PendingAtomicReference<String> reference = new PendingAtomicReference<String>();
         synchronized (os) {
             stringResults.put(operationId, reference);
-            os.write(STRING_RESULT);
+            os.write(COMMAND);
             writeValue(operationId);
             writeUserCommand(resultMapper, command);
         }
@@ -144,7 +137,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         PendingAtomicReference<String> reference = new PendingAtomicReference<String>();
         synchronized (os) {
             objectResults.put(operationId, reference);
-            os.write(OBJECT_RESULT);
+            os.write(COMMAND);
             writeValue(operationId);
             writeUserCommand(resultMapper, command);
         }

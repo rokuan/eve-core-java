@@ -42,7 +42,6 @@ public class UserConnection extends Thread {
         // TODO: fill the mapper
         mapper = new ObjectMapper();
         authenticate(c);
-        handlerThread.start();
     }
 
     private void authenticate(Credentials credentials) throws Exception {
