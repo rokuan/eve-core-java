@@ -32,6 +32,8 @@ public class UserConnection extends Thread {
     private final Map<String, StreamReceiver> receivers = new HashMap<String, StreamReceiver>();
     private final Map<String, StreamContext> contexts = new HashMap<String, StreamContext>();
     private final Map<String, ObjectStreamSource> sources = new HashMap<String, ObjectStreamSource>();
+    private final Map<Receiver, String> receiverIds = new HashMap<Receiver, String>();
+    private final Map<Context, String> contextIds = new HashMap<Context, String>();
 
     private final AtomicBoolean running = new AtomicBoolean(true);
 
@@ -60,6 +62,7 @@ public class UserConnection extends Thread {
         try {
             String receiverId = handler.stringOperation(new RegisterReceiverCommand(), mapper);
             StreamReceiver streamReceiver = new StreamReceiver(receiverId, handler, r);
+            receiverIds.put(r, receiverId);
             receivers.put(receiverId, streamReceiver);
             sources.put(receiverId, streamReceiver);
         } catch (IOException e) {
@@ -71,8 +74,37 @@ public class UserConnection extends Thread {
         try {
             String contextId = handler.stringOperation(new RegisterContextCommand(), mapper);
             StreamContext streamContext = new StreamContext(contextId, handler, c);
+            contextIds.put(c, contextId);
             contexts.put(contextId, streamContext);
             sources.put(contextId, streamContext);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void unregisterReceiver(Receiver r) {
+        try {
+            String receiverId = receiverIds.get(r);
+            if (receiverId != null) {
+                receivers.remove(receiverId);
+                sources.remove(receiverId);
+                receiverIds.remove(r);
+                handler.commandOperation(new UnregisterReceiverCommand(receiverId), mapper);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void unregisterContext(Context c) {
+        try {
+           String contextId = contextIds.get(c);
+            if (contextId != null) {
+                contexts.remove(contextId);
+                sources.remove(contextId);
+                contextIds.remove(c);
+                handler.commandOperation(new UnregisterContextCommand(contextId), mapper);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

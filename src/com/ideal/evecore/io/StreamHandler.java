@@ -66,7 +66,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
                             handleObjectAnswer();
                             break;
                         case -1:
-                            throw new IOException("Client has disconnected");
+                            throw new IOException("Remote has disconnected");
                     }
                 } catch (IOException e) {
                     running.set(false);
