@@ -1,5 +1,7 @@
 package com.ideal.evecore.interpreter.data;
 
+import com.ideal.evecore.io.serialization.EveObjectSerialization;
+
 /**
  * Created by Christophe on 06/04/2017.
  */

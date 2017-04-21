@@ -48,7 +48,8 @@ public class StreamContext extends ObjectStreamSource implements Context {
         } else if (command instanceof FindOneItemOfTypeCommand) {
             FindOneItemOfTypeCommand query = (FindOneItemOfTypeCommand) command;
             Option<EveStructuredObject> item = findOneItemOfType(query.getItemType());
-            source.writeResponse(mapper, item);
+            Result<EveStructuredObject> result = Conversions.toResult(item);
+            source.writeResultResponse(mapper, result);
         } else if (command instanceof ObjectCommand) {
             handleObjectCommand((ObjectCommand)command, source);
         }

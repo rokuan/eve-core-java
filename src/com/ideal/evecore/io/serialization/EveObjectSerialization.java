@@ -107,7 +107,7 @@ public class EveObjectSerialization {
                     String objectId = "";
 
                     while(jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                        String field = jsonParser.nextFieldName();
+                        String field = jsonParser.getCurrentName();
 
                         if ("type".equals(field)) {
                             try {
@@ -116,9 +116,9 @@ public class EveObjectSerialization {
 
                             }
                         } else if ("value".equals(field)) {
-                            jsonParser.nextToken();
+                            jsonParser.nextToken(); // to dismiss JsonToken.START_OBJECT
                             while(jsonParser.nextToken() != JsonToken.END_OBJECT){
-                                String attribute = jsonParser.nextFieldName();
+                                String attribute = jsonParser.getCurrentName();
                                 values.put(attribute, deserialize(jsonParser, deserializationContext));
                             }
                         } else if (EveObject.DOMAIN_KEY.equals(field)) {
@@ -144,6 +144,7 @@ public class EveObjectSerialization {
                         elements.add(deserialize(jsonParser, deserializationContext));
                     }
                     return new EveObjectList(elements);
+                // TODO: EveDateObject, ...
                 case VALUE_NULL:
                 default:
                     return null;

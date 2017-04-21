@@ -12,6 +12,7 @@ public abstract class Option<T> {
     abstract public <R> Option<R> map(Transformer<T, R> transformer);
     abstract public void foreach(Handler<T> handler);
     abstract public Option<T> filter(Predicate<T> predicate);
+    abstract public boolean exists(Predicate<T> predicate);
     abstract public <M extends T, O> Option<O> collect(Matcher<M, ? extends O>... matchers);
 
     static public <T> Option<T> apply(T t) {
@@ -74,6 +75,11 @@ public abstract class Option<T> {
         }
 
         @Override
+        public boolean exists(Predicate<T> predicate) {
+            return predicate.matches(value);
+        }
+
+        @Override
         public <M extends T, O> Option<O> collect(Matcher<M, ? extends O>... matchers) {
             for(Matcher<M, ? extends O> matcher: matchers){
                 try {
@@ -125,6 +131,11 @@ public abstract class Option<T> {
         @Override
         public Option<T> filter(Predicate<T> predicate) {
             return new None<T>();
+        }
+
+        @Override
+        public boolean exists(Predicate<T> predicate) {
+            return false;
         }
 
         @Override
