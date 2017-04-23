@@ -8,12 +8,14 @@ import com.ideal.evecore.interpreter.data.EveObject;
 import com.ideal.evecore.interpreter.data.EveStructuredObject;
 import com.ideal.evecore.io.StreamHandler;
 import com.ideal.evecore.io.StreamSource;
+import com.ideal.evecore.io.command.query.FindItemByIdCommand;
 import com.ideal.evecore.io.command.receiver.*;
 import com.ideal.evecore.io.serialization.EveObjectSerialization;
 import com.ideal.evecore.io.serialization.ValueMatcherSerialization;
 import com.ideal.evecore.universe.matcher.ValueMatcher;
 import com.ideal.evecore.universe.receiver.EveObjectMessage;
 import com.ideal.evecore.universe.receiver.Receiver;
+import com.ideal.evecore.util.Conversions;
 import com.ideal.evecore.util.Option;
 import com.ideal.evecore.util.Result;
 
@@ -47,6 +49,10 @@ public class StreamReceiver extends ObjectStreamSource implements Receiver {
             HandleMessageCommand c = (HandleMessageCommand) command;
             Result<EveObject> result = handleMessage(c.getMessage());
             source.writeResponse(mapper, result);
+        } else if (command instanceof FindItemByIdCommand) {
+            FindItemByIdCommand c = (FindItemByIdCommand) command;
+            Option<EveStructuredObject> result = findById(c.getId());
+            source.writeResultResponse(mapper, Conversions.toResult(result));
         } else if (command instanceof GetReceiverNameCommand) {
             String name = getReceiverName();
             source.writeStringResponse(name);

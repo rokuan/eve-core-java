@@ -9,4 +9,6 @@ public final class InitReceiverCommand extends AbstractCommand implements Receiv
     public InitReceiverCommand() {
         super(INIT_RECEIVER);
     }
+
+    public static final InitReceiverCommand INIT_RECEIVER_COMMAND = new InitReceiverCommand();
 }

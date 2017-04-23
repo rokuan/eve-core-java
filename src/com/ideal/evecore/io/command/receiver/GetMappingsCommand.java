@@ -9,4 +9,6 @@ public final class GetMappingsCommand extends AbstractCommand implements Receive
     public GetMappingsCommand() {
         super(GET_MAPPINGS);
     }
+
+    public static final GetMappingsCommand GET_MAPPINGS_COMMAND = new GetMappingsCommand();
 }

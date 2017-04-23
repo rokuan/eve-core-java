@@ -10,4 +10,6 @@ public class UndefinedValueMatcher implements ValueMatcher {
     public boolean matches(EveObject o) {
         return false;
     }
+
+    public static final UndefinedValueMatcher UNDEFINED_VALUE_MATCHER = new UndefinedValueMatcher();
 }

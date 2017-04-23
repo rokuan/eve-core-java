@@ -9,4 +9,6 @@ public final class DestroyReceiverCommand extends AbstractCommand implements Rec
     public DestroyReceiverCommand() {
         super(DESTROY_RECEIVER);
     }
+
+    public static final DestroyReceiverCommand DESTROY_RECEIVER_COMMAND = new DestroyReceiverCommand();
 }

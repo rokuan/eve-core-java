@@ -50,8 +50,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
 
     @Override
     public String getType() {
-        UserCommand command = getCommand(new GetTypeCommand());
         try {
+            UserCommand command = getCommand(new GetTypeCommand());
             return handler.stringOperation(command, mapper);
         } catch (IOException e) {
             return "";
@@ -60,8 +60,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
 
     @Override
     public boolean has(String field) {
-        UserCommand command = getCommand(new HasFieldCommand(field));
         try {
+            UserCommand command = getCommand(new HasFieldCommand(field));
             return handler.booleanOperation(command, mapper);
         } catch (IOException e) {
             return false;
@@ -70,8 +70,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
 
     @Override
     public boolean hasState(String state) {
-        UserCommand command = getCommand(new HasStateCommand(state));
         try {
+            UserCommand command = getCommand(new HasStateCommand(state));
             return handler.booleanOperation(command, mapper);
         } catch (IOException e) {
             return false;
@@ -80,8 +80,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
 
     @Override
     public Option<EveObject> get(String field) {
-        UserCommand command = getCommand(new GetFieldCommand(field));
         try {
+            UserCommand command = getCommand(new GetFieldCommand(field));
             Result<EveObject> result = handler.resultOperation(command, mapper, EveObject.class);
             return Conversions.toOption(result);
         } catch (IOException e) {
@@ -91,8 +91,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
 
     @Override
     public Option<String> getState(String state) {
-        UserCommand command = getCommand(new GetStateCommand(state));
         try {
+            UserCommand command = getCommand(new GetStateCommand(state));
             Result<String> result = handler.resultOperation(command, mapper, String.class);
             return Conversions.toOption(result);
         } catch (IOException e) {
@@ -102,8 +102,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
 
     @Override
     public void set(String field, EveObject value) {
-        UserCommand command = getCommand(new SetFieldCommand(field, value));
         try {
+            UserCommand command = getCommand(new SetFieldCommand(field, value));
             handler.commandOperation(command, mapper);
         } catch (IOException e) {
 
@@ -112,8 +112,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
 
     @Override
     public void setState(String field, String value) {
-        UserCommand command = getCommand(new SetStateCommand(field, value));
         try {
+            UserCommand command = getCommand(new SetStateCommand(field, value));
             handler.commandOperation(command, mapper);
         } catch (IOException e) {
 

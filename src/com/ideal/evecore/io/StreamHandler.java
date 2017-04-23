@@ -1,5 +1,7 @@
 package com.ideal.evecore.io;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -132,7 +134,33 @@ public class StreamHandler extends StreamUtils implements Runnable {
         return reference.get();
     }
 
+    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {
+        String json = getJson(command, resultMapper);
+        return resultMapper.readValue(json, clazz);
+    }
+
+    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, TypeReference<T> typeReference) throws IOException {
+        String json = getJson(command, resultMapper);
+        return resultMapper.readValue(json, typeReference);
+    }
+
+    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, JavaType t) throws IOException {
+        String json = getJson(command, resultMapper);
+        return resultMapper.readValue(json, t);
+    }
+
     public <T> Result<T> resultOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {
+        String json = getJson(command, resultMapper);
+        JsonNode node = resultMapper.readTree(json);
+
+        if (node.get("success").asBoolean(false)) {
+            return Result.ok(resultMapper.treeToValue(node.get("value"), clazz));
+        } else {
+            return Result.ko(node.get("error").asText());
+        }
+    }
+
+    protected String getJson(UserCommand command, ObjectMapper resultMapper) throws IOException {
         String operationId = String.valueOf(stamp.getAndIncrement());
         PendingAtomicReference<String> reference = new PendingAtomicReference<String>();
         synchronized (os) {
@@ -141,15 +169,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
             writeValue(operationId);
             writeUserCommand(resultMapper, command);
         }
-
-        String json = reference.get();
-        JsonNode node = resultMapper.readTree(json);
-
-        if (node.get("success").asBoolean(false)) {
-            return Result.ok(resultMapper.treeToValue(node.get("value"), clazz));
-        } else {
-            return Result.ko(node.get("error").asText());
-        }
+        return reference.get();
     }
 
     public void commandOperation(UserCommand command, ObjectMapper resultMapper) throws IOException {

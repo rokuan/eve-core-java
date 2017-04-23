@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ideal.evecore.interpreter.Context;
 import com.ideal.evecore.interpreter.QuerySource;
+import com.ideal.evecore.interpreter.data.EveObject;
 import com.ideal.evecore.interpreter.data.EveObjectList;
 import com.ideal.evecore.interpreter.data.EveStructuredObject;
 import com.ideal.evecore.io.StreamHandler;
@@ -13,6 +14,7 @@ import com.ideal.evecore.io.command.context.FindItemsOfTypeCommand;
 import com.ideal.evecore.io.command.context.FindOneItemOfTypeCommand;
 import com.ideal.evecore.io.command.query.ObjectCommand;
 import com.ideal.evecore.io.serialization.EveObjectListSerialization;
+import com.ideal.evecore.io.serialization.EveObjectSerialization;
 import com.ideal.evecore.io.serialization.EveStructuredObjectSerialization;
 import com.ideal.evecore.util.Conversions;
 import com.ideal.evecore.util.Option;
@@ -34,6 +36,7 @@ public class StreamContext extends ObjectStreamSource implements Context {
         context = c;
         mapper = new ObjectMapper(); // TODO: build the mapper
         SimpleModule basicModule = new SimpleModule();
+        basicModule.addSerializer(EveObject.class, new EveObjectSerialization.EveObjectSerializer(contextId));
         basicModule.addSerializer(EveObjectList.class, new EveObjectListSerialization.EveObjectListSerializer(contextId));
         basicModule.addSerializer(EveStructuredObject.class, new EveStructuredObjectSerialization.EveStructuredObjectSerializer(contextId));
         mapper.registerModule(basicModule);

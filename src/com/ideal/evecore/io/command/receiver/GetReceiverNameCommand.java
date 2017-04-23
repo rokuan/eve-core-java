@@ -9,4 +9,6 @@ public final class GetReceiverNameCommand extends AbstractCommand implements Rec
     public GetReceiverNameCommand() {
         super(GET_RECEIVER_NAME);
     }
+
+    public static final GetReceiverNameCommand GET_RECEIVER_NAME_COMMAND = new GetReceiverNameCommand();
 }
