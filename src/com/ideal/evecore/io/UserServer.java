@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Created by chris on 21/04/2017.
+ * Created by Christophe on 21/04/2017.
  */
 public abstract class UserServer<T extends Session> extends Thread implements Closeable {
     protected ServerSocket server;
@@ -52,6 +52,12 @@ public abstract class UserServer<T extends Session> extends Thread implements Cl
         }
     }
 
+    /**
+     * Tries to connect an user using its credentials
+     * @param login The login of the account
+     * @param password The password for the account
+     * @return A result containing the session if the authentication was successful
+     */
     abstract Result<T> authenticate(String login, String password);
     abstract UserSocket<T> connectUser(Socket socket, T user);
 

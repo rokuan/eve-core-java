@@ -42,6 +42,12 @@ public class StreamContext extends ObjectStreamSource implements Context {
         mapper.registerModule(basicModule);
     }
 
+    /**
+     * Calls the underlying context's method
+     * @param command
+     * @param source
+     * @throws IOException
+     */
     public final void handleCommand(ContextCommand command, StreamSource source) throws IOException {
         if (command instanceof FindItemsOfTypeCommand) {
             FindItemsOfTypeCommand query = (FindItemsOfTypeCommand) command;

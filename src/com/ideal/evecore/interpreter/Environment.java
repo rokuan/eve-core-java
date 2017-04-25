@@ -48,10 +48,20 @@ public class Environment implements Context {
         }
     }
 
+    /**
+     * Adds a context to this environment
+     * @param c The context to add
+     */
     public void addContext(Context c) {
-        contexts.add(c);
+        if (!contexts.contains(c)) {
+            contexts.add(c);
+        }
     }
 
+    /**
+     * Removes a context from this environment
+     * @param c The context to remove
+     */
     public void remoteContext(Context c) {
         contexts.remove(c);
     }

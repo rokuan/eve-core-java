@@ -6,8 +6,14 @@ import com.ideal.evecore.interpreter.data.EveObject;
  * Created by Christophe on 09/04/2017.
  */
 public class AnyValueMatcher implements ValueMatcher {
+    protected AnyValueMatcher() {
+
+    }
+
     @Override
     public boolean matches(EveObject o) {
         return true;
     }
+
+    public static final AnyValueMatcher ANY_VALUE_MATCHER = new AnyValueMatcher();
 }

@@ -97,6 +97,12 @@ public abstract class UserSocket<T extends Session> extends Thread {
         }
     }
 
+    /**
+     * Evaluate a text and write the result back to the sender
+     * @param text The text to parse and evaluate
+     * @param sender The sender of the request
+     * @throws IOException
+     */
     protected void evaluate(String text, StreamSource sender) throws IOException {
         try {
             InterpretationObject o = parser.parseText(text);
@@ -107,6 +113,12 @@ public abstract class UserSocket<T extends Session> extends Thread {
         }
     }
 
+    /**
+     * Redirects a command right back to the User so it can handle it and then redirect the result to the sender
+     * @param command The received command
+     * @param sender The initial sender
+     * @throws IOException
+     */
     protected void redirectObjectCommand(ObjectRequestCommand command, StreamSource sender) throws IOException {
         EveStructuredObjectCommand oc = command.getObjectCommand();
         if (oc instanceof GetTypeCommand) {
@@ -129,6 +141,11 @@ public abstract class UserSocket<T extends Session> extends Thread {
         }
     }
 
+    /**
+     * Registers a new receiver to this world and writes back its newly generated ID
+     * @param sender
+     * @throws IOException
+     */
     protected void registerReceiver(StreamSource sender) throws IOException {
         String receiverId = freshId();
         RemoteReceiver remoteReceiver = new RemoteReceiver(receiverId, handler);
@@ -138,6 +155,11 @@ public abstract class UserSocket<T extends Session> extends Thread {
         sender.writeStringResponse(receiverId);
     }
 
+    /**
+     * Registers a new context to this environment and writes back its newly generated ID
+     * @param sender
+     * @throws IOException
+     */
     protected void registerContext(StreamSource sender) throws IOException {
         String contextId = freshId();
         RemoteContext remoteContext = new RemoteContext(contextId, handler);
@@ -147,6 +169,10 @@ public abstract class UserSocket<T extends Session> extends Thread {
         sender.writeStringResponse(contextId);
     }
 
+    /**
+     * Removes a receiver from this world
+     * @param receiverId This receiver's ID
+     */
     protected void unregisterReceiver(String receiverId) {
         RemoteReceiver receiver = receivers.remove(receiverId);
         sources.remove(receiverId);
@@ -155,6 +181,10 @@ public abstract class UserSocket<T extends Session> extends Thread {
         }
     }
 
+    /**
+     * Removes a context from this environment
+     * @param contextId This context's ID
+     */
     protected void unregisterContext(String contextId) {
         RemoteContext context = contexts.remove(contextId);
         sources.remove(contextId);
@@ -163,6 +193,10 @@ public abstract class UserSocket<T extends Session> extends Thread {
         }
     }
 
+    /**
+     * Generates a new ID
+     * @return a freshly created ID
+     */
     private final String freshId() {
         return String.valueOf(idGenerator.getAndIncrement());
     }

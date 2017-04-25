@@ -3,7 +3,7 @@ package com.ideal.evecore.interpreter.data;
 import com.ideal.evecore.util.Result;
 
 /**
- * Created by chris on 21/04/2017.
+ * Created by Christophe on 21/04/2017.
  */
 public class EveResultObject {
     public static Result<EveObject> ok() {

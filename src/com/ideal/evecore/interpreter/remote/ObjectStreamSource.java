@@ -27,6 +27,12 @@ public abstract class ObjectStreamSource implements QuerySource {
 
     protected abstract ObjectMapper getMapper();
 
+    /**
+     * Call the corresponding EveStructuredObject's method and writes the result back to the sender
+     * @param command
+     * @param source
+     * @throws IOException
+     */
     public final void handleObjectCommand(final ObjectCommand command, final StreamSource source) throws IOException {
         findById(command.getObjectId()).foreach(new Handler<EveStructuredObject>() {
             @Override
