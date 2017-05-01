@@ -1,5 +1,6 @@
 package com.ideal.evecore.io.command.user;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.ideal.evecore.io.command.AbstractCommand;
 
 /**
@@ -7,7 +8,14 @@ import com.ideal.evecore.io.command.AbstractCommand;
  */
 
 public final class RegisterReceiverCommand extends AbstractCommand implements UserCommand {
-    public RegisterReceiverCommand() {
+    protected RegisterReceiverCommand() {
         super(REGISTER_RECEIVER);
     }
+
+    @JsonCreator
+    protected static RegisterReceiverCommand getInstance() {
+        return REGISTER_RECEIVER_COMMAND;
+    }
+
+    public static final RegisterReceiverCommand REGISTER_RECEIVER_COMMAND = new RegisterReceiverCommand();
 }

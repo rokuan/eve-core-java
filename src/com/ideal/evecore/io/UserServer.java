@@ -58,8 +58,8 @@ public abstract class UserServer<T extends Session> extends Thread implements Cl
      * @param password The password for the account
      * @return A result containing the session if the authentication was successful
      */
-    abstract Result<T> authenticate(String login, String password);
-    abstract UserSocket<T> connectUser(Socket socket, T user);
+    public abstract Result<T> authenticate(String login, String password);
+    public abstract UserSocket<T> connectUser(Socket socket, T user);
 
     @Override
     public void close() throws IOException {

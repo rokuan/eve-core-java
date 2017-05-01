@@ -1,5 +1,6 @@
 package com.ideal.evecore.universe.matcher;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.ideal.evecore.interpreter.data.EveObject;
 
 /**
@@ -13,6 +14,11 @@ public class AnyValueMatcher implements ValueMatcher {
     @Override
     public boolean matches(EveObject o) {
         return true;
+    }
+
+    @JsonCreator
+    protected static AnyValueMatcher getInstance() {
+        return ANY_VALUE_MATCHER;
     }
 
     public static final AnyValueMatcher ANY_VALUE_MATCHER = new AnyValueMatcher();

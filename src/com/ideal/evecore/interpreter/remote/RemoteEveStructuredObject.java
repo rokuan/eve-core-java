@@ -51,7 +51,7 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
     @Override
     public String getType() {
         try {
-            UserCommand command = getCommand(new GetTypeCommand());
+            UserCommand command = getCommand(GetTypeCommand.GET_TYPE_COMMAND);
             return handler.stringOperation(command, mapper);
         } catch (IOException e) {
             return "";

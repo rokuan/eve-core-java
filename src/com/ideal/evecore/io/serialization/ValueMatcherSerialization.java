@@ -61,7 +61,7 @@ public class ValueMatcherSerialization {
                 case VALUE_STRING:
                     String value = jsonParser.getText();
                     if ("*".equals(value)) {
-                        return new AnyValueMatcher();
+                        return AnyValueMatcher.ANY_VALUE_MATCHER;
                     } else {
                         return new StringValueMatcher(value);
                     }
@@ -85,9 +85,9 @@ public class ValueMatcherSerialization {
                     }
                     return new ObjectValueMatcher(entries);
                 case VALUE_NULL:
-                    return new NullValueMatcher();
+                    return NullValueMatcher.NULL_VALUE_MATCHER;
                 default:
-                    return new UndefinedValueMatcher();
+                    return UndefinedValueMatcher.UNDEFINED_VALUE_MATCHER;
             }
         }
     }

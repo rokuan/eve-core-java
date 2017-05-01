@@ -65,7 +65,7 @@ public class UserConnection extends Thread {
 
     public void registerReceiver(Receiver r) {
         try {
-            String receiverId = handler.stringOperation(new RegisterReceiverCommand(), mapper);
+            String receiverId = handler.stringOperation(RegisterReceiverCommand.REGISTER_RECEIVER_COMMAND, mapper);
             StreamReceiver streamReceiver = new StreamReceiver(receiverId, handler, r);
             receiverIds.put(r, receiverId);
             receivers.put(receiverId, streamReceiver);
@@ -77,7 +77,7 @@ public class UserConnection extends Thread {
 
     public void registerContext(Context c) {
         try {
-            String contextId = handler.stringOperation(new RegisterContextCommand(), mapper);
+            String contextId = handler.stringOperation(RegisterContextCommand.REGISTER_CONTEXT_COMMAND, mapper);
             StreamContext streamContext = new StreamContext(contextId, handler, c);
             contextIds.put(c, contextId);
             contexts.put(contextId, streamContext);

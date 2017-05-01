@@ -151,8 +151,8 @@ public abstract class UserSocket<T extends Session> extends Thread {
         RemoteReceiver remoteReceiver = new RemoteReceiver(receiverId, handler);
         receivers.put(receiverId, remoteReceiver);
         sources.put(receiverId, remoteReceiver);
-        world.registerReceiver(remoteReceiver);
         sender.writeStringResponse(receiverId);
+        world.registerReceiver(remoteReceiver);
     }
 
     /**
@@ -165,8 +165,8 @@ public abstract class UserSocket<T extends Session> extends Thread {
         RemoteContext remoteContext = new RemoteContext(contextId, handler);
         contexts.put(contextId, remoteContext);
         sources.put(contextId, remoteContext);
-        environment.addContext(remoteContext);
         sender.writeStringResponse(contextId);
+        environment.addContext(remoteContext);
     }
 
     /**

@@ -15,6 +15,7 @@ import com.ideal.evecore.io.command.user.ReceiverRequestCommand;
 import com.ideal.evecore.io.command.user.UserCommand;
 import com.ideal.evecore.io.serialization.EveObjectSerialization;
 import com.ideal.evecore.io.serialization.EveStructuredObjectSerialization;
+import com.ideal.evecore.io.serialization.ValueMatcherSerialization;
 import com.ideal.evecore.universe.matcher.UndefinedValueMatcher;
 import com.ideal.evecore.universe.matcher.ValueMatcher;
 import com.ideal.evecore.universe.receiver.EveObjectMessage;
@@ -43,7 +44,10 @@ public class RemoteReceiver implements Receiver, QuerySource {
         SimpleModule eveObjectModule = new SimpleModule();
         eveObjectModule.addDeserializer(EveStructuredObject.class, new EveStructuredObjectSerialization.EveStructuredObjectDeserializer(handler));
         eveObjectModule.addDeserializer(EveObject.class, new EveObjectSerialization.EveObjectDeserializer(handler));
+        SimpleModule matcherModule = new SimpleModule();
+        matcherModule.addDeserializer(ValueMatcher.class, new ValueMatcherSerialization.ValueMatcherDeserializer());
         mapper.registerModule(eveObjectModule);
+        mapper.registerModule(matcherModule);
     }
 
     @Override
