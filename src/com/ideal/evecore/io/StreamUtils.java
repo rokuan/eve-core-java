@@ -1,6 +1,8 @@
 package com.ideal.evecore.io;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.ideal.evecore.io.command.user.UserCommand;
 
 import java.io.IOException;
@@ -31,6 +33,11 @@ public abstract class StreamUtils extends BasicSocketUtils {
 
     protected <T> void writeItem(ObjectMapper mapper, T t) throws IOException {
         String json = mapper.writeValueAsString(t);
+        writeValue(json);
+    }
+
+    protected <T> void writeItem(ObjectWriter writer, T t) throws IOException {
+        String json = writer.writeValueAsString(t);
         writeValue(json);
     }
 }

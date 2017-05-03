@@ -2,6 +2,7 @@ package com.ideal.evecore.interpreter.remote;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.type.MapType;
 import com.ideal.evecore.common.Mapping;
 import com.ideal.evecore.interpreter.QuerySource;
 import com.ideal.evecore.interpreter.data.EveObject;
@@ -44,11 +45,12 @@ public class StreamReceiver extends ObjectStreamSource implements Receiver {
     public final void handleCommand(ReceiverCommand command, StreamSource source) throws IOException {
         if (command instanceof GetMappingsCommand) {
             Mapping<ValueMatcher> mappings = getMappings();
-            source.writeResponse(mapper, mappings);
+            MapType mappingType = mapper.getTypeFactory().constructMapType(Mapping.class, String.class, ValueMatcher.class);
+            source.writeResponse(mapper, mappings, mappingType);
         } else if (command instanceof HandleMessageCommand) {
             HandleMessageCommand c = (HandleMessageCommand) command;
             Result<EveObject> result = handleMessage(c.getMessage());
-            source.writeResponse(mapper, result);
+            source.writeResultResponse(mapper, result);
         } else if (command instanceof FindItemByIdCommand) {
             FindItemByIdCommand c = (FindItemByIdCommand) command;
             Option<EveStructuredObject> result = findById(c.getId());

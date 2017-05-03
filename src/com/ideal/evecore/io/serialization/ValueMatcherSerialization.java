@@ -81,7 +81,9 @@ public class ValueMatcherSerialization {
                 case START_OBJECT:
                     Map<String, ValueMatcher> entries = new HashMap<String, ValueMatcher>();
                     while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                        entries.put(jsonParser.nextFieldName(), deserialize(jsonParser, deserializationContext));
+                        String field = jsonParser.getCurrentName();
+                        jsonParser.nextToken();
+                        entries.put(field, deserialize(jsonParser, deserializationContext));
                     }
                     return new ObjectValueMatcher(entries);
                 case VALUE_NULL:
