@@ -3,6 +3,7 @@ package com.ideal.evecore.interpreter.remote;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.type.MapLikeType;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.ideal.evecore.common.Mapping;
 import com.ideal.evecore.interpreter.QuerySource;
@@ -91,7 +92,7 @@ public class RemoteReceiver implements Receiver, QuerySource {
     @Override
     public Mapping<ValueMatcher> getMappings() {
         try {
-            MapType mappingType = mapper.getTypeFactory().constructMapType(Mapping.class, String.class, ValueMatcher.class);
+            MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
             return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, mappingType);
         } catch (IOException e) {
             e.printStackTrace();

@@ -139,14 +139,9 @@ public class StreamHandler extends StreamUtils implements Runnable {
         return resultMapper.readValue(json, clazz);
     }
 
-    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, TypeReference<T> typeReference) throws IOException {
-        String json = getJson(command, resultMapper);
-        return resultMapper.readValue(json, typeReference);
-    }
-
     public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, JavaType t) throws IOException {
         String json = getJson(command, resultMapper);
-        return resultMapper.readValue(json, t);
+        return resultMapper.readerFor(t).readValue(json);
     }
 
     public <T> Result<T> resultOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {

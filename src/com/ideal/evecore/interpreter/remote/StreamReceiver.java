@@ -2,6 +2,7 @@ package com.ideal.evecore.interpreter.remote;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.type.MapLikeType;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.ideal.evecore.common.Mapping;
 import com.ideal.evecore.interpreter.QuerySource;
@@ -45,7 +46,7 @@ public class StreamReceiver extends ObjectStreamSource implements Receiver {
     public final void handleCommand(ReceiverCommand command, StreamSource source) throws IOException {
         if (command instanceof GetMappingsCommand) {
             Mapping<ValueMatcher> mappings = getMappings();
-            MapType mappingType = mapper.getTypeFactory().constructMapType(Mapping.class, String.class, ValueMatcher.class);
+            MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
             source.writeResponse(mapper, mappings, mappingType);
         } else if (command instanceof HandleMessageCommand) {
             HandleMessageCommand c = (HandleMessageCommand) command;
