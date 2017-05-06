@@ -7,6 +7,7 @@ import com.ideal.evecore.common.Credentials;
 import com.ideal.evecore.common.SocketWrapper;
 import com.ideal.evecore.interpreter.Context;
 import com.ideal.evecore.interpreter.data.EveObject;
+import com.ideal.evecore.interpreter.data.EveStructuredObject;
 import com.ideal.evecore.interpreter.remote.ObjectStreamSource;
 import com.ideal.evecore.interpreter.remote.StreamContext;
 import com.ideal.evecore.interpreter.remote.StreamReceiver;
@@ -14,6 +15,7 @@ import com.ideal.evecore.io.command.context.ContextCommand;
 import com.ideal.evecore.io.command.query.ObjectCommand;
 import com.ideal.evecore.io.command.user.*;
 import com.ideal.evecore.io.serialization.EveObjectSerialization;
+import com.ideal.evecore.io.serialization.EveStructuredObjectSerialization;
 import com.ideal.evecore.universe.receiver.Receiver;
 import com.ideal.evecore.util.Pair;
 import com.ideal.evecore.util.Result;
@@ -47,6 +49,7 @@ public class UserConnection extends Thread {
         mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
         module.addDeserializer(EveObject.class, new EveObjectSerialization.EveObjectDeserializer(handler));
+        module.addDeserializer(EveStructuredObject.class, new EveStructuredObjectSerialization.EveStructuredObjectDeserializer(handler));
         mapper.registerModule(module);
         authenticate(c);
     }

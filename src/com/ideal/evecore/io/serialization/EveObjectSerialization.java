@@ -15,6 +15,7 @@ import com.ideal.evecore.io.StreamHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,9 @@ public class EveObjectSerialization {
 
         @Override
         public void serialize(EveObject eveObject, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException, JsonProcessingException {
-            if (eveObject instanceof EveStringObject) {
+            if (eveObject instanceof EveNoneObject) {
+                jsonGenerator.writeString(EveNoneObject.NONE_LABEL);
+            } else if (eveObject instanceof EveStringObject) {
                 jsonGenerator.writeString(((EveStringObject)eveObject).getValue());
             } else if (eveObject instanceof EveNumberObject) {
                 Number value = ((EveNumberObject)eveObject).getValue();
@@ -68,15 +71,18 @@ public class EveObjectSerialization {
                 jsonGenerator.writeStringField("type", EveStructuredObjectCategory.MAPPING.name());
                 jsonGenerator.writeFieldName("value");
                 jsonGenerator.writeStartObject();
-                Mapping<EveObject> values = ((EveMappingObject)eveObject).getValues();
-                for(Map.Entry<String, EveObject> entry: values.entrySet()){
+                Mapping<EveObject> values = ((EveMappingObject) eveObject).getValues();
+                for (Map.Entry<String, EveObject> entry : values.entrySet()) {
                     jsonGenerator.writeFieldName(entry.getKey());
                     serialize(entry.getValue(), jsonGenerator, serializerProvider);
                 }
                 jsonGenerator.writeEndObject();
                 jsonGenerator.writeEndObject();
+            } else if (eveObject instanceof EveDateObject) {
+                Date d = ((EveDateObject) eveObject).getValue();
+                jsonGenerator.writeString(EveDateObject.PLACE_HOLDER.format(d));
             } else {
-                // TODO: EveDateObject, ...
+                // TODO: other types
             }
         }
     }
@@ -92,7 +98,14 @@ public class EveObjectSerialization {
         public EveObject deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
             switch(jsonParser.getCurrentToken()){
                 case VALUE_STRING:
-                    return new EveStringObject(jsonParser.getText());
+                    String value = jsonParser.getText();
+                    if (EveNoneObject.NONE_LABEL.equals(value)) {
+                        return EveNoneObject.NONE;
+                    } else if (EveDateObject.PLACE_HOLDER.matches(value)) {
+                        return new EveDateObject(EveDateObject.PLACE_HOLDER.getValue(value));
+                    } else {
+                        return new EveStringObject(jsonParser.getText());
+                    }
                 case VALUE_TRUE:
                 case VALUE_FALSE:
                     return new EveBooleanObject(jsonParser.getBooleanValue());

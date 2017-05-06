@@ -45,6 +45,7 @@ public class RemoteReceiver implements Receiver, QuerySource {
         SimpleModule eveObjectModule = new SimpleModule();
         eveObjectModule.addDeserializer(EveStructuredObject.class, new EveStructuredObjectSerialization.EveStructuredObjectDeserializer(handler));
         eveObjectModule.addDeserializer(EveObject.class, new EveObjectSerialization.EveObjectDeserializer(handler));
+        eveObjectModule.addSerializer(EveStructuredObject.class, new EveStructuredObjectSerialization.EveStructuredObjectSerializer(receiverId));
         SimpleModule matcherModule = new SimpleModule();
         matcherModule.addDeserializer(ValueMatcher.class, new ValueMatcherSerialization.ValueMatcherDeserializer());
         mapper.registerModule(eveObjectModule);
@@ -92,8 +93,9 @@ public class RemoteReceiver implements Receiver, QuerySource {
     @Override
     public Mapping<ValueMatcher> getMappings() {
         try {
-            MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
-            return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, mappingType);
+            /*MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
+            return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, mappingType);*/
+            return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, new TypeReference<Mapping<ValueMatcher>>(){});
         } catch (IOException e) {
             e.printStackTrace();
             return new Mapping<ValueMatcher>(new Pair<String, ValueMatcher>("*", UndefinedValueMatcher.UNDEFINED_VALUE_MATCHER));

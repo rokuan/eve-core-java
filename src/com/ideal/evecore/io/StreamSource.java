@@ -1,5 +1,6 @@
 package com.ideal.evecore.io;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,12 @@ public class StreamSource extends StreamUtils {
         os.write(OBJECT_RESULT);
         writeValue(sourceId);
         writeItem(responseMapper, response);
+    }
+
+    public <T> void writeResponse(ObjectMapper responseMapper, T response, TypeReference<T> t) throws IOException {
+        os.write(OBJECT_RESULT);
+        writeValue(sourceId);
+        writeItem(responseMapper.writerFor(t), response);
     }
 
     public <T> void writeResponse(ObjectMapper responseMapper, T response, JavaType t) throws IOException {

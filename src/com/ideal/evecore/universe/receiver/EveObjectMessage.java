@@ -1,5 +1,7 @@
 package com.ideal.evecore.universe.receiver;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ideal.evecore.interpreter.data.EveStructuredObject;
 
 /**
@@ -8,7 +10,8 @@ import com.ideal.evecore.interpreter.data.EveStructuredObject;
 public class EveObjectMessage {
     private EveStructuredObject content;
 
-    public EveObjectMessage(EveStructuredObject o){
+    @JsonCreator
+    public EveObjectMessage(@JsonProperty("content") EveStructuredObject o){
         content = o;
     }
 

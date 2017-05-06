@@ -1,5 +1,6 @@
 package com.ideal.evecore.interpreter.remote;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.MapLikeType;
@@ -13,6 +14,7 @@ import com.ideal.evecore.io.StreamSource;
 import com.ideal.evecore.io.command.query.FindItemByIdCommand;
 import com.ideal.evecore.io.command.receiver.*;
 import com.ideal.evecore.io.serialization.EveObjectSerialization;
+import com.ideal.evecore.io.serialization.EveStructuredObjectSerialization;
 import com.ideal.evecore.io.serialization.ValueMatcherSerialization;
 import com.ideal.evecore.universe.matcher.ValueMatcher;
 import com.ideal.evecore.universe.receiver.EveObjectMessage;
@@ -46,8 +48,9 @@ public class StreamReceiver extends ObjectStreamSource implements Receiver {
     public final void handleCommand(ReceiverCommand command, StreamSource source) throws IOException {
         if (command instanceof GetMappingsCommand) {
             Mapping<ValueMatcher> mappings = getMappings();
-            MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
-            source.writeResponse(mapper, mappings, mappingType);
+            /*MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
+            source.writeResponse(mapper, mappings, mappingType);*/
+            source.writeResponse(mapper, mappings, new TypeReference<Mapping<ValueMatcher>>(){});
         } else if (command instanceof HandleMessageCommand) {
             HandleMessageCommand c = (HandleMessageCommand) command;
             Result<EveObject> result = handleMessage(c.getMessage());

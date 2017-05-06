@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ideal.evecore.interpreter.data.EveObject;
+import com.ideal.evecore.interpreter.data.EveStructuredObject;
 import com.ideal.evecore.io.command.user.UserCommand;
 import com.ideal.evecore.io.serialization.EveObjectSerialization;
+import com.ideal.evecore.io.serialization.EveStructuredObjectSerialization;
 import com.ideal.evecore.util.Pair;
 import com.ideal.evecore.util.PendingAtomicReference;
 import com.ideal.evecore.util.Result;
@@ -44,6 +46,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
         module.addDeserializer(EveObject.class, new EveObjectSerialization.EveObjectDeserializer(this));
+        module.addDeserializer(EveStructuredObject.class, new EveStructuredObjectSerialization.EveStructuredObjectDeserializer(this));
         mapper.registerModule(module);
     }
 
@@ -137,6 +140,11 @@ public class StreamHandler extends StreamUtils implements Runnable {
     public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {
         String json = getJson(command, resultMapper);
         return resultMapper.readValue(json, clazz);
+    }
+
+    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, TypeReference<T> t) throws IOException {
+        String json = getJson(command, resultMapper);
+        return resultMapper.readerFor(t).readValue(json);
     }
 
     public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, JavaType t) throws IOException {

@@ -15,5 +15,6 @@ public class EveNoneObject implements EveObject {
         return NONE;
     }
 
+    public static final String NONE_LABEL = "[__EveNone][/__EveNone]";
     public static final EveNoneObject NONE = new EveNoneObject();
 }

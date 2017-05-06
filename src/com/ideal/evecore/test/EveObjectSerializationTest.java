@@ -1,5 +1,6 @@
 package com.ideal.evecore.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ideal.evecore.interpreter.data.*;
@@ -12,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -73,5 +76,15 @@ public class EveObjectSerializationTest {
                 System.out.println(entry.getKey() + " -> " + entry.getValue());
             }
         }
+    }
+
+    @Test
+    public void testDateSerialization() throws IOException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+        EveDateObject o = new EveDateObject(new Date());
+        String result = mapper.writeValueAsString(o);
+        System.out.println(result);
+        EveDateObject d = (EveDateObject)mapper.readValue(result, EveObject.class);
+        System.out.println(d.getValue());
     }
 }
