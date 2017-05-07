@@ -31,6 +31,8 @@ public class StreamHandler extends StreamUtils implements Runnable {
     public static final int STRING_RESULT = 2;
     public static final int OBJECT_RESULT = 3;
 
+    private static final String END_TOKEN = "X";
+
     private final AtomicBoolean running = new AtomicBoolean(true);
     private final Map<String, PendingAtomicReference<String>> objectResults = new HashMap<String, PendingAtomicReference<String>>();
     private final Map<String, PendingAtomicReference<String>> stringResults = new HashMap<String, PendingAtomicReference<String>>();
@@ -71,13 +73,20 @@ public class StreamHandler extends StreamUtils implements Runnable {
                             handleObjectAnswer();
                             break;
                         case -1:
-                            throw new IOException("Remote has disconnected");
+                            //throw new IOException("Remote has disconnected");
+                            stop();
+                            break;
                     }
                 } catch (IOException e) {
-                    running.set(false);
+                    stop();
                 }
             }
         }
+    }
+
+    protected void stop() {
+        commands.offer(new Pair<String, UserCommand>(END_TOKEN, null));
+        running.set(false);
     }
 
     protected void handleUserCommand() throws IOException {
@@ -185,6 +194,10 @@ public class StreamHandler extends StreamUtils implements Runnable {
     }
 
     public Pair<String, UserCommand> nextCommand() throws InterruptedException {
-        return commands.take();
+        Pair<String, UserCommand> request = commands.take();
+        if (END_TOKEN.equals(request.first)) {
+            throw new InterruptedException("Socket has disconnected");
+        }
+        return request;
     }
 }

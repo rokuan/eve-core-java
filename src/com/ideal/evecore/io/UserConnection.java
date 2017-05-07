@@ -94,10 +94,10 @@ public class UserConnection extends Thread {
         try {
             String receiverId = receiverIds.get(r);
             if (receiverId != null) {
+                handler.commandOperation(new UnregisterReceiverCommand(receiverId), mapper);
                 receivers.remove(receiverId);
                 sources.remove(receiverId);
                 receiverIds.remove(r);
-                handler.commandOperation(new UnregisterReceiverCommand(receiverId), mapper);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -108,10 +108,10 @@ public class UserConnection extends Thread {
         try {
            String contextId = contextIds.get(c);
             if (contextId != null) {
+                handler.commandOperation(new UnregisterContextCommand(contextId), mapper);
                 contexts.remove(contextId);
                 sources.remove(contextId);
                 contextIds.remove(c);
-                handler.commandOperation(new UnregisterContextCommand(contextId), mapper);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,9 +142,9 @@ public class UserConnection extends Thread {
                     executeObjectCommand((ObjectRequestCommand) command, source);
                 }
             } catch (InterruptedException e) {
-                running.set(false);
+                disconnect();
             } catch (IOException e) {
-                running.set(false);
+                disconnect();
             }
         }
     }
@@ -173,6 +173,7 @@ public class UserConnection extends Thread {
 
     public void disconnect() {
         running.set(false);
-        try { socket.close(); } catch (Exception e) {}
+        try { socket.close(); } catch (Throwable t) {}
+        try { handlerThread.interrupt(); } catch (Throwable t) {}
     }
 }

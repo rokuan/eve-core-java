@@ -62,7 +62,7 @@ public class Environment implements Context {
      * Removes a context from this environment
      * @param c The context to remove
      */
-    public void remoteContext(Context c) {
+    public void removeContext(Context c) {
         contexts.remove(c);
     }
 }

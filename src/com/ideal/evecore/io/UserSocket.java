@@ -8,7 +8,6 @@ import com.ideal.evecore.interpreter.QuerySource;
 import com.ideal.evecore.interpreter.data.EveObject;
 import com.ideal.evecore.interpreter.remote.RemoteContext;
 import com.ideal.evecore.interpreter.remote.RemoteReceiver;
-import com.ideal.evecore.io.command.query.ObjectCommand;
 import com.ideal.evecore.io.command.structured.*;
 import com.ideal.evecore.io.command.user.*;
 import com.ideal.evecore.io.serialization.EveObjectSerialization;
@@ -189,7 +188,7 @@ public abstract class UserSocket<T extends Session> extends Thread {
         RemoteContext context = contexts.remove(contextId);
         sources.remove(contextId);
         if (context != null) {
-            environment.remoteContext(context);
+            environment.removeContext(context);
         }
     }
 
