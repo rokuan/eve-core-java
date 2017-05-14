@@ -12,7 +12,7 @@ public abstract class Matcher<T, R> {
     }
 
     public <V> R getIfMatches(V value) throws NoMatchException {
-        if(value == null || value.getClass().isAssignableFrom(clazz)){
+        if (value == null || !clazz.isAssignableFrom(value.getClass())) {
             throw new NoMatchException();
         }
         return transformer.apply((T)value);

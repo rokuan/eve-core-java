@@ -48,7 +48,7 @@ public class StreamContext extends ObjectStreamSource implements Context {
      * @param source
      * @throws IOException
      */
-    public final void handleCommand(ContextCommand command, StreamSource source) throws IOException {
+    public synchronized final void handleCommand(ContextCommand command, StreamSource source) throws IOException {
         if (command instanceof FindItemsOfTypeCommand) {
             FindItemsOfTypeCommand query = (FindItemsOfTypeCommand) command;
             Option<EveObjectList> items = findItemsOfType(query.getItemType());

@@ -131,16 +131,25 @@ public class UserConnection extends Thread {
         while (running.get()) {
             try {
                 Pair<String, UserCommand> parameters = handler.nextCommand();
-                StreamSource source = new StreamSource(socket, parameters.first);
-                UserCommand command = parameters.second;
+                final StreamSource source = new StreamSource(socket, parameters.first);
+                final UserCommand command = parameters.second;
 
-                if (command instanceof ReceiverRequestCommand) {
-                    executeReceiverCommand((ReceiverRequestCommand) command, source);
-                } else if (command instanceof ContextRequestCommand) {
-                    executeContextCommand((ContextRequestCommand) command, source);
-                } else if (command instanceof ObjectRequestCommand) {
-                    executeObjectCommand((ObjectRequestCommand) command, source);
-                }
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (command instanceof ReceiverRequestCommand) {
+                                executeReceiverCommand((ReceiverRequestCommand) command, source);
+                            } else if (command instanceof ContextRequestCommand) {
+                                executeContextCommand((ContextRequestCommand) command, source);
+                            } else if (command instanceof ObjectRequestCommand) {
+                                executeObjectCommand((ObjectRequestCommand) command, source);
+                            }
+                        } catch (IOException e) {
+                            disconnect();
+                        }
+                    }
+                }.start();
             } catch (InterruptedException e) {
                 disconnect();
             } catch (IOException e) {

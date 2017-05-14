@@ -70,26 +70,31 @@ public abstract class UserSocket<T extends Session> extends Thread {
         while (running.get()) {
             try {
                 Pair<String, UserCommand> request = handler.nextCommand();
-                UserCommand command = request.second;
-                StreamSource sender = new StreamSource(socket, request.first);
+                final UserCommand command = request.second;
+                final StreamSource sender = new StreamSource(socket, request.first);
 
-                try {
-                    if (command instanceof ObjectRequestCommand) {
-                        redirectObjectCommand((ObjectRequestCommand) command, sender);
-                    } else if (command instanceof EvaluateCommand) {
-                        evaluate(((EvaluateCommand) command).getText(), sender);
-                    } else if (command instanceof RegisterContextCommand) {
-                        registerContext(sender);
-                    } else if (command instanceof RegisterReceiverCommand) {
-                        registerReceiver(sender);
-                    } else if (command instanceof UnregisterContextCommand) {
-                        unregisterContext(((UnregisterContextCommand) command).getContextId());
-                    } else if (command instanceof UnregisterReceiverCommand) {
-                        unregisterReceiver(((UnregisterReceiverCommand) command).getReceiverId());
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (command instanceof ObjectRequestCommand) {
+                                redirectObjectCommand((ObjectRequestCommand) command, sender);
+                            } else if (command instanceof EvaluateCommand) {
+                                evaluate(((EvaluateCommand) command).getText(), sender);
+                            } else if (command instanceof RegisterContextCommand) {
+                                registerContext(sender);
+                            } else if (command instanceof RegisterReceiverCommand) {
+                                registerReceiver(sender);
+                            } else if (command instanceof UnregisterContextCommand) {
+                                unregisterContext(((UnregisterContextCommand) command).getContextId());
+                            } else if (command instanceof UnregisterReceiverCommand) {
+                                unregisterReceiver(((UnregisterReceiverCommand) command).getReceiverId());
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                }.start();
             } catch (Exception e) {
                 running.set(false);
             }

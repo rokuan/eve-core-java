@@ -45,11 +45,9 @@ public class StreamReceiver extends ObjectStreamSource implements Receiver {
         mapper.registerModule(basicModule);
     }
 
-    public final void handleCommand(ReceiverCommand command, StreamSource source) throws IOException {
+    public synchronized final void handleCommand(ReceiverCommand command, StreamSource source) throws IOException {
         if (command instanceof GetMappingsCommand) {
             Mapping<ValueMatcher> mappings = getMappings();
-            /*MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
-            source.writeResponse(mapper, mappings, mappingType);*/
             source.writeResponse(mapper, mappings, new TypeReference<Mapping<ValueMatcher>>(){});
         } else if (command instanceof HandleMessageCommand) {
             HandleMessageCommand c = (HandleMessageCommand) command;

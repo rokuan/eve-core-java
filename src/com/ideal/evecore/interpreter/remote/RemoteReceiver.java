@@ -93,8 +93,6 @@ public class RemoteReceiver implements Receiver, QuerySource {
     @Override
     public Mapping<ValueMatcher> getMappings() {
         try {
-            /*MapLikeType mappingType = mapper.getTypeFactory().constructMapLikeType(Mapping.class, String.class, ValueMatcher.class);
-            return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, mappingType);*/
             return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, new TypeReference<Mapping<ValueMatcher>>(){});
         } catch (IOException e) {
             e.printStackTrace();
