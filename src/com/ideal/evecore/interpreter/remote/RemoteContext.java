@@ -51,6 +51,9 @@ public class RemoteContext implements Context, QuerySource {
         } catch (IOException e) {
             e.printStackTrace();
             return Option.empty();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return Option.empty();
         }
     }
 
@@ -62,6 +65,9 @@ public class RemoteContext implements Context, QuerySource {
         } catch (IOException e) {
             e.printStackTrace();
             return Option.empty();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return Option.empty();
         }
     }
 
@@ -71,6 +77,9 @@ public class RemoteContext implements Context, QuerySource {
             Result<EveStructuredObject> result = handler.resultOperation(getUserCommand(new FindItemByIdCommand(id)), mapper, EveStructuredObject.class);
             return Conversions.toOption(result);
         } catch (IOException e) {
+            e.printStackTrace();
+            return Option.empty();
+        } catch (InterruptedException e) {
             e.printStackTrace();
             return Option.empty();
         }

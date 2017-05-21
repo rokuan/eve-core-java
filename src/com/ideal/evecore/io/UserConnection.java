@@ -75,6 +75,8 @@ public class UserConnection extends Thread {
             sources.put(receiverId, streamReceiver);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -86,6 +88,8 @@ public class UserConnection extends Thread {
             contexts.put(contextId, streamContext);
             sources.put(contextId, streamContext);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -122,6 +126,8 @@ public class UserConnection extends Thread {
         try {
             return handler.resultOperation(new EvaluateCommand(text), mapper, EveObject.class);
         } catch (IOException e) {
+            return Result.ko(e);
+        } catch (InterruptedException e) {
             return Result.ko(e);
         }
     }

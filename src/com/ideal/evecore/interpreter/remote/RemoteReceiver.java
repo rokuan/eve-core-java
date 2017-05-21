@@ -33,6 +33,8 @@ import java.lang.reflect.Type;
  * Created by Christophe on 22/04/2017.
  */
 public class RemoteReceiver implements Receiver, QuerySource {
+    public static final String UNKNOWN_RECEIVER_NAME = "_UNKNOWN_RECEIVER";
+
     protected final String receiverId;
     protected final StreamHandler handler;
     protected final ObjectMapper mapper;
@@ -58,6 +60,9 @@ public class RemoteReceiver implements Receiver, QuerySource {
             Result<EveStructuredObject> result = handler.resultOperation(getUserCommand(new FindItemByIdCommand(id)), mapper, EveStructuredObject.class);
             return Conversions.toOption(result);
         } catch (IOException e) {
+            e.printStackTrace();
+            return Option.empty();
+        } catch (InterruptedException e) {
             e.printStackTrace();
             return Option.empty();
         }
@@ -86,7 +91,9 @@ public class RemoteReceiver implements Receiver, QuerySource {
         try {
             return handler.stringOperation(getUserCommand(GetReceiverNameCommand.GET_RECEIVER_NAME_COMMAND), mapper);
         } catch (IOException e) {
-            return "_UNKNOWN_RECEIVER";
+            return UNKNOWN_RECEIVER_NAME;
+        } catch (InterruptedException e) {
+            return UNKNOWN_RECEIVER_NAME;
         }
     }
 
@@ -97,6 +104,9 @@ public class RemoteReceiver implements Receiver, QuerySource {
         } catch (IOException e) {
             e.printStackTrace();
             return new Mapping<ValueMatcher>(new Pair<String, ValueMatcher>("*", UndefinedValueMatcher.UNDEFINED_VALUE_MATCHER));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return new Mapping<ValueMatcher>(new Pair<String, ValueMatcher>("*", UndefinedValueMatcher.UNDEFINED_VALUE_MATCHER));
         }
     }
 
@@ -105,6 +115,8 @@ public class RemoteReceiver implements Receiver, QuerySource {
         try {
             return handler.resultOperation(getUserCommand(new HandleMessageCommand(message)), mapper, EveObject.class);
         } catch (IOException e) {
+            return Result.ko(e);
+        } catch (InterruptedException e) {
             return Result.ko(e);
         }
     }

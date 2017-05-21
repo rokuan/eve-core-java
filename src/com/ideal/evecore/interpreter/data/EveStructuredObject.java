@@ -11,6 +11,6 @@ public interface EveStructuredObject extends EveObject {
     boolean hasState(String state);
     Option<EveObject> get(String field);
     Option<String> getState(String state);
-    void set(String field, EveObject value);
-    void setState(String field, String value);
+    boolean set(String field, EveObject value);
+    boolean setState(String field, String value);
 }

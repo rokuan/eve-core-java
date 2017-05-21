@@ -122,7 +122,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         }
     }
 
-    public boolean booleanOperation(UserCommand command, ObjectMapper resultMapper) throws IOException {
+    public boolean booleanOperation(UserCommand command, ObjectMapper resultMapper) throws IOException, InterruptedException {
         String operationId = String.valueOf(stamp.getAndIncrement());
         PendingAtomicReference<Boolean> reference = new PendingAtomicReference<Boolean>();
         synchronized (os) {
@@ -134,7 +134,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         return reference.get();
     }
 
-    public String stringOperation(UserCommand command, ObjectMapper resultMapper) throws IOException {
+    public String stringOperation(UserCommand command, ObjectMapper resultMapper) throws IOException, InterruptedException {
         String operationId = String.valueOf(stamp.getAndIncrement());
         PendingAtomicReference<String> reference = new PendingAtomicReference<String>();
         synchronized (os) {
@@ -146,22 +146,22 @@ public class StreamHandler extends StreamUtils implements Runnable {
         return reference.get();
     }
 
-    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {
+    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException, InterruptedException {
         String json = getJson(command, resultMapper);
         return resultMapper.readValue(json, clazz);
     }
 
-    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, TypeReference<T> t) throws IOException {
+    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, TypeReference<T> t) throws IOException, InterruptedException {
         String json = getJson(command, resultMapper);
         return resultMapper.readerFor(t).readValue(json);
     }
 
-    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, JavaType t) throws IOException {
+    public <T> T objectOperation(UserCommand command, ObjectMapper resultMapper, JavaType t) throws IOException, InterruptedException {
         String json = getJson(command, resultMapper);
         return resultMapper.readerFor(t).readValue(json);
     }
 
-    public <T> Result<T> resultOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException {
+    public <T> Result<T> resultOperation(UserCommand command, ObjectMapper resultMapper, Class<T> clazz) throws IOException, InterruptedException {
         String json = getJson(command, resultMapper);
         JsonNode node = resultMapper.readTree(json);
 
@@ -172,7 +172,7 @@ public class StreamHandler extends StreamUtils implements Runnable {
         }
     }
 
-    protected String getJson(UserCommand command, ObjectMapper resultMapper) throws IOException {
+    protected String getJson(UserCommand command, ObjectMapper resultMapper) throws IOException, InterruptedException {
         String operationId = String.valueOf(stamp.getAndIncrement());
         PendingAtomicReference<String> reference = new PendingAtomicReference<String>();
         synchronized (os) {

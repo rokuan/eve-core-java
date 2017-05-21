@@ -92,6 +92,8 @@ public abstract class UserSocket<T extends Session> extends Thread {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }.start();
@@ -123,7 +125,7 @@ public abstract class UserSocket<T extends Session> extends Thread {
      * @param sender The initial sender
      * @throws IOException
      */
-    protected void redirectObjectCommand(ObjectRequestCommand command, StreamSource sender) throws IOException {
+    protected void redirectObjectCommand(ObjectRequestCommand command, StreamSource sender) throws IOException, InterruptedException {
         EveStructuredObjectCommand oc = command.getObjectCommand();
         if (oc instanceof GetTypeCommand) {
             String type = handler.stringOperation(command, mapper);

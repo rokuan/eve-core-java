@@ -61,12 +61,12 @@ public class EveMappingObject implements EveStructuredObject {
     }
 
     @Override
-    public void set(String field, EveObject value) {
-
+    public boolean set(String field, EveObject value) {
+        return false;
     }
 
     @Override
-    public void setState(String field, String value) {
-
+    public boolean setState(String field, String value) {
+        return false;
     }
 }

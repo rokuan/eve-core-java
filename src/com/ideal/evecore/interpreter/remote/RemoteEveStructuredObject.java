@@ -55,6 +55,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
             return handler.stringOperation(command, mapper);
         } catch (IOException e) {
             return "";
+        } catch (InterruptedException e) {
+            return "";
         }
     }
 
@@ -65,6 +67,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
             return handler.booleanOperation(command, mapper);
         } catch (IOException e) {
             return false;
+        } catch (InterruptedException e) {
+            return false;
         }
     }
 
@@ -74,6 +78,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
             UserCommand command = getCommand(new HasStateCommand(state));
             return handler.booleanOperation(command, mapper);
         } catch (IOException e) {
+            return false;
+        } catch (InterruptedException e) {
             return false;
         }
     }
@@ -86,6 +92,8 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
             return Conversions.toOption(result);
         } catch (IOException e) {
             return Option.empty();
+        } catch (InterruptedException e) {
+            return Option.empty();
         }
     }
 
@@ -97,26 +105,32 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
             return Conversions.toOption(result);
         } catch (IOException e) {
             return Option.empty();
+        } catch (InterruptedException e) {
+            return Option.empty();
         }
     }
 
     @Override
-    public void set(String field, EveObject value) {
+    public boolean set(String field, EveObject value) {
         try {
             UserCommand command = getCommand(new SetFieldCommand(field, value));
-            handler.commandOperation(command, mapper);
+            return handler.booleanOperation(command, mapper);
         } catch (IOException e) {
-
+            return false;
+        } catch (InterruptedException e) {
+            return false;
         }
     }
 
     @Override
-    public void setState(String field, String value) {
+    public boolean setState(String field, String value) {
         try {
             UserCommand command = getCommand(new SetStateCommand(field, value));
-            handler.commandOperation(command, mapper);
+            return handler.booleanOperation(command, mapper);
         } catch (IOException e) {
-
+            return false;
+        } catch (InterruptedException e) {
+            return false;
         }
     }
 }
