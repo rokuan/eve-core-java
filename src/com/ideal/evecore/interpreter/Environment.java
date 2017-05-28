@@ -18,7 +18,7 @@ public class Environment implements Context {
     @Override
     public Option<EveStructuredObject> findOneItemOfType(String type) {
         synchronized (contexts) {
-            for (Context c: contexts) {
+            for (Context c : contexts) {
                 Option<EveStructuredObject> result = c.findOneItemOfType(type);
                 if (result.isDefined()) {
                     return result;
@@ -50,6 +50,7 @@ public class Environment implements Context {
 
     /**
      * Adds a context to this environment
+     *
      * @param c The context to add
      */
     public void addContext(Context c) {
@@ -60,6 +61,7 @@ public class Environment implements Context {
 
     /**
      * Removes a context from this environment
+     *
      * @param c The context to remove
      */
     public void removeContext(Context c) {

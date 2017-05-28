@@ -110,7 +110,7 @@ public class UserConnection extends Thread {
 
     public void unregisterContext(Context c) {
         try {
-           String contextId = contextIds.get(c);
+            String contextId = contextIds.get(c);
             if (contextId != null) {
                 handler.commandOperation(new UnregisterContextCommand(contextId), mapper);
                 contexts.remove(contextId);
@@ -166,21 +166,21 @@ public class UserConnection extends Thread {
 
     protected void executeReceiverCommand(ReceiverRequestCommand command, StreamSource source) throws IOException {
         StreamReceiver receiver = receivers.get(command.getReceiverId());
-        if(receiver != null){
+        if (receiver != null) {
             receiver.handleCommand(command.getReceiverCommand(), source);
         }
     }
 
     protected void executeContextCommand(ContextRequestCommand command, StreamSource source) throws IOException {
         StreamContext context = contexts.get(command.getContextId());
-        if(context != null){
+        if (context != null) {
             context.handleCommand(command.getContextCommand(), source);
         }
     }
 
     protected void executeObjectCommand(ObjectRequestCommand command, StreamSource source) throws IOException {
         ObjectStreamSource domain = sources.get(command.getDomainId());
-        if(domain != null){
+        if (domain != null) {
             ObjectCommand delegateCommand = new ObjectCommand(command.getObjectId(), command.getObjectCommand());
             domain.handleObjectCommand(delegateCommand, source);
         }
@@ -188,7 +188,13 @@ public class UserConnection extends Thread {
 
     public void disconnect() {
         running.set(false);
-        try { socket.close(); } catch (Throwable t) {}
-        try { handlerThread.interrupt(); } catch (Throwable t) {}
+        try {
+            socket.close();
+        } catch (Throwable t) {
+        }
+        try {
+            handlerThread.interrupt();
+        } catch (Throwable t) {
+        }
     }
 }

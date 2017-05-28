@@ -13,7 +13,7 @@ public final class SetFieldCommand extends AbstractCommand implements EveStructu
     private final EveObject value;
 
     @JsonCreator
-    public SetFieldCommand(@JsonProperty("field") String f, @JsonProperty("value") EveObject v){
+    public SetFieldCommand(@JsonProperty("field") String f, @JsonProperty("value") EveObject v) {
         super(SET_FIELD);
         field = f;
         value = v;

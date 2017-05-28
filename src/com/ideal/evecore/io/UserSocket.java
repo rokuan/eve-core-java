@@ -142,6 +142,9 @@ public abstract class UserSocket<T extends Session> extends Thread {
         } else if (oc instanceof HasStateCommand) {
             boolean has = handler.booleanOperation(command, mapper);
             sender.writeBooleanResponse(has);
+        } else if (oc instanceof CallActionCommand) {
+            boolean returnedValue = handler.booleanOperation(command, mapper);
+            sender.writeBooleanResponse(returnedValue);
         } else {
             handler.commandOperation(command, mapper);
         }

@@ -48,7 +48,7 @@ public class StreamReceiver extends ObjectStreamSource implements Receiver {
     public synchronized final void handleCommand(ReceiverCommand command, StreamSource source) throws IOException {
         if (command instanceof GetMappingsCommand) {
             Mapping<ValueMatcher> mappings = getMappings();
-            source.writeResponse(mapper, mappings, new TypeReference<Mapping<ValueMatcher>>(){});
+            source.writeResponse(mapper, mappings, new TypeReference<Mapping<ValueMatcher>>() {});
         } else if (command instanceof HandleMessageCommand) {
             HandleMessageCommand c = (HandleMessageCommand) command;
             Result<EveObject> result = handleMessage(c.getMessage());

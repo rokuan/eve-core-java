@@ -21,18 +21,21 @@ public interface Receiver {
 
     /**
      * Retrieves this receiver's name
+     *
      * @return The name of this receiver
      */
     String getReceiverName();
 
     /**
      * Gets the definition field for this receiver (i.e. the messages this receiver can handle)
+     *
      * @return
      */
     Mapping<ValueMatcher> getMappings();
 
     /**
      * Executes a message and gets the output if the execution is successful
+     *
      * @param message The message to process
      * @return
      */

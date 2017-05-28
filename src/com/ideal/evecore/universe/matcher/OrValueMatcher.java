@@ -24,7 +24,7 @@ public class OrValueMatcher implements ValueMatcher {
 
     @Override
     public boolean matches(EveObject o) {
-        for (int i=0; i<values.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             if (values[i].matches(o)) {
                 return true;
             }

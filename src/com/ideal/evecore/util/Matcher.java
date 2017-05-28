@@ -15,10 +15,10 @@ public abstract class Matcher<T, R> {
         if (value == null || !clazz.isAssignableFrom(value.getClass())) {
             throw new NoMatchException();
         }
-        return transformer.apply((T)value);
+        return transformer.apply((T) value);
     }
 
-    protected Matcher(Class<T> c, Transformer<T, R> t){
+    protected Matcher(Class<T> c, Transformer<T, R> t) {
         clazz = c;
         transformer = t;
     }

@@ -6,7 +6,7 @@ package com.ideal.evecore.io.command;
 public abstract class AbstractCommand {
     protected final String command;
 
-    protected AbstractCommand(String cmd){
+    protected AbstractCommand(String cmd) {
         command = cmd;
     }
 }

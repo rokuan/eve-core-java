@@ -10,6 +10,7 @@ import com.ideal.evecore.util.Result;
 
 import java.io.IOException;
 import java.net.Socket;
+
 import static com.ideal.evecore.io.StreamHandler.*;
 
 /**
@@ -58,7 +59,7 @@ public class StreamSource extends StreamUtils {
         writeValue(sourceId);
         final JsonNodeFactory factory = JsonNodeFactory.instance;
         ObjectNode value = factory.objectNode();
-        if(response.isSuccess()) {
+        if (response.isSuccess()) {
             value.put("success", true);
             value.put("value", responseMapper.valueToTree(response.get()));
         } else {

@@ -9,15 +9,15 @@ import java.util.List;
 public class EveObjectList implements EveObject {
     private List<EveObject> values;
 
-    public EveObjectList(List<EveObject> l){
+    public EveObjectList(List<EveObject> l) {
         values = l;
     }
 
-    public EveObjectList(EveObject... os){
+    public EveObjectList(EveObject... os) {
         this(Arrays.asList(os));
     }
 
-    public List<EveObject> getValues(){
+    public List<EveObject> getValues() {
         return values;
     }
 }

@@ -11,6 +11,7 @@ import com.ideal.evecore.io.command.structured.*;
 import com.ideal.evecore.util.Conversions;
 import com.ideal.evecore.util.Handler;
 import com.ideal.evecore.util.Option;
+import com.rokuan.calliopecore.sentence.IAction;
 
 import java.io.IOException;
 
@@ -29,6 +30,7 @@ public abstract class ObjectStreamSource implements QuerySource {
 
     /**
      * Call the corresponding EveStructuredObject's method and writes the result back to the sender
+     *
      * @param command
      * @param source
      * @throws IOException
@@ -47,7 +49,7 @@ public abstract class ObjectStreamSource implements QuerySource {
                 Option<EveObject> value = (o != null) ? o.get(field) : Option.<EveObject>empty();
                 source.writeResultResponse(mapper, Conversions.toResult(value));
             } else if (objectCommand instanceof SetFieldCommand) {
-                SetFieldCommand cmd = (SetFieldCommand)objectCommand;
+                SetFieldCommand cmd = (SetFieldCommand) objectCommand;
                 if (o != null) {
                     o.set(cmd.getField(), cmd.getValue());
                 }
@@ -68,6 +70,10 @@ public abstract class ObjectStreamSource implements QuerySource {
                 String field = ((HasStateCommand) objectCommand).getField();
                 boolean has = (o != null) ? o.hasState(field) : false;
                 source.writeBooleanResponse(has);
+            } else if (objectCommand instanceof CallActionCommand) {
+                IAction.ActionType action = ((CallActionCommand) objectCommand).getAction();
+                boolean returnedValue = (o != null) ? o.call(action) : false;
+                source.writeBooleanResponse(returnedValue);
             }
         } catch (IOException e) {
 

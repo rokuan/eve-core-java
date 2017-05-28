@@ -5,14 +5,16 @@ package com.ideal.evecore.util;
  */
 public abstract class Result<T> {
     abstract public boolean isSuccess();
+
     abstract public T get();
+
     abstract public Throwable getError();
 
-    public static <T> Result<T> ok(T t){
+    public static <T> Result<T> ok(T t) {
         return new Success<T>(t);
     }
 
-    public static <T> Result<T> ko(Throwable t){
+    public static <T> Result<T> ko(Throwable t) {
         return new Failure<T>(t);
     }
 
@@ -23,7 +25,7 @@ public abstract class Result<T> {
     public static final class Success<T> extends Result<T> {
         private T value;
 
-        public Success(T t){
+        public Success(T t) {
             value = t;
         }
 
@@ -46,7 +48,7 @@ public abstract class Result<T> {
     public static final class Failure<T> extends Result<T> {
         private Throwable error;
 
-        public Failure(Throwable t){
+        public Failure(Throwable t) {
             error = t;
         }
 

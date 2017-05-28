@@ -11,11 +11,11 @@ public class EveObjectMessage {
     private EveStructuredObject content;
 
     @JsonCreator
-    public EveObjectMessage(@JsonProperty("content") EveStructuredObject o){
+    public EveObjectMessage(@JsonProperty("content") EveStructuredObject o) {
         content = o;
     }
 
-    public EveStructuredObject getContent(){
+    public EveStructuredObject getContent() {
         return content;
     }
 }

@@ -6,11 +6,11 @@ package com.ideal.evecore.interpreter.data;
 public final class EveNumberObject implements EveObject {
     private Number value;
 
-    public EveNumberObject(Number n){
+    public EveNumberObject(Number n) {
         value = n;
     }
 
-    public Number getValue(){
+    public Number getValue() {
         return value;
     }
 }

@@ -50,7 +50,7 @@ public class EveObjectSerializationTest {
         String result = mapper.writeValueAsString(list);
         System.out.println(result);
         EveObjectList conversion = mapper.readValue(result, EveObjectList.class);
-        for (EveObject o: conversion.getValues()) {
+        for (EveObject o : conversion.getValues()) {
             System.out.println(o);
         }
     }
@@ -72,7 +72,7 @@ public class EveObjectSerializationTest {
             System.out.println("[REMOTE] " + remote.getDomainId() + " / " + remote.getObjectId());
         } else if (conversion instanceof EveMappingObject) {
             EveMappingObject mapping = (EveMappingObject) conversion;
-            for(Map.Entry<String, EveObject> entry: mapping.getValues().entrySet()) {
+            for (Map.Entry<String, EveObject> entry : mapping.getValues().entrySet()) {
                 System.out.println(entry.getKey() + " -> " + entry.getValue());
             }
         }
@@ -84,7 +84,7 @@ public class EveObjectSerializationTest {
         EveDateObject o = new EveDateObject(new Date());
         String result = mapper.writeValueAsString(o);
         System.out.println(result);
-        EveDateObject d = (EveDateObject)mapper.readValue(result, EveObject.class);
+        EveDateObject d = (EveDateObject) mapper.readValue(result, EveObject.class);
         System.out.println(d.getValue());
     }
 }

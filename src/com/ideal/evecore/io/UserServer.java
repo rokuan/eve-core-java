@@ -44,7 +44,10 @@ public abstract class UserServer<T extends Session> extends Thread implements Cl
                         client.close();
                     }
                 } catch (Exception e) {
-                    try { client.close(); } catch (Exception e1) {}
+                    try {
+                        client.close();
+                    } catch (Exception e1) {
+                    }
                 }
             } catch (IOException e) {
                 running.set(false);
@@ -54,11 +57,13 @@ public abstract class UserServer<T extends Session> extends Thread implements Cl
 
     /**
      * Tries to connect an user using its credentials
-     * @param login The login of the account
+     *
+     * @param login    The login of the account
      * @param password The password for the account
      * @return A result containing the session if the authentication was successful
      */
     public abstract Result<T> authenticate(String login, String password);
+
     public abstract UserSocket<T> connectUser(Socket socket, T user);
 
     @Override

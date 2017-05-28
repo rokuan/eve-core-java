@@ -100,7 +100,8 @@ public class RemoteReceiver implements Receiver, QuerySource {
     @Override
     public Mapping<ValueMatcher> getMappings() {
         try {
-            return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, new TypeReference<Mapping<ValueMatcher>>(){});
+            return handler.objectOperation(getUserCommand(GetMappingsCommand.GET_MAPPINGS_COMMAND), mapper, new TypeReference<Mapping<ValueMatcher>>() {
+            });
         } catch (IOException e) {
             e.printStackTrace();
             return new Mapping<ValueMatcher>(new Pair<String, ValueMatcher>("*", UndefinedValueMatcher.UNDEFINED_VALUE_MATCHER));

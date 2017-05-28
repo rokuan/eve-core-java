@@ -20,7 +20,7 @@ public class UserCommandSerializationTest {
     private ObjectMapper mapper;
 
     @Before
-    public void initialize(){
+    public void initialize() {
         mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
         module.addDeserializer(EveObject.class, new EveObjectSerialization.EveObjectDeserializer(null));
@@ -34,6 +34,6 @@ public class UserCommandSerializationTest {
         String json = mapper.writeValueAsString(objectCommand);
         System.out.println(json);
         UserCommand conversion = mapper.readValue(json, UserCommand.class);
-        System.out.println(((ObjectRequestCommand)conversion).getObjectCommand());
+        System.out.println(((ObjectRequestCommand) conversion).getObjectCommand());
     }
 }

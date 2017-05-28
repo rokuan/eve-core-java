@@ -20,7 +20,7 @@ public class ObjectValueMatcher implements ValueMatcher {
 
     public ObjectValueMatcher(Pair<String, ValueMatcher>... ms) {
         values = new HashMap<String, ValueMatcher>();
-        for (Pair<String, ValueMatcher> entry: ms) {
+        for (Pair<String, ValueMatcher> entry : ms) {
             values.put(entry.first, entry.second);
         }
     }

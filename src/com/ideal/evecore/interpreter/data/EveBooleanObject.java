@@ -6,11 +6,11 @@ package com.ideal.evecore.interpreter.data;
 public final class EveBooleanObject implements EveObject {
     private boolean value;
 
-    public EveBooleanObject(boolean b){
+    public EveBooleanObject(boolean b) {
         value = b;
     }
 
-    public boolean getValue(){
+    public boolean getValue() {
         return value;
     }
 }

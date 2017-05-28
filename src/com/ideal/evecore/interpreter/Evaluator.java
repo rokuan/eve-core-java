@@ -10,6 +10,7 @@ import com.rokuan.calliopecore.sentence.structure.InterpretationObject;
 public interface Evaluator {
     /**
      * Interprets the object
+     *
      * @param o The object to evaluate
      * @return The result of the interpretation if the operation is successful
      */

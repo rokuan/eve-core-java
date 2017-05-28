@@ -5,8 +5,7 @@ import com.ideal.evecore.util.Matcher;
 import com.ideal.evecore.util.Option;
 import com.ideal.evecore.util.Pair;
 import com.ideal.evecore.util.Transformer;
-
-import java.util.HashMap;
+import com.rokuan.calliopecore.sentence.IAction;
 
 /**
  * Created by Christophe on 06/04/2017.
@@ -14,13 +13,13 @@ import java.util.HashMap;
 public class EveMappingObject implements EveStructuredObject {
     private final Mapping<EveObject> mapping;
 
-    public EveMappingObject(Mapping<EveObject> m){
+    public EveMappingObject(Mapping<EveObject> m) {
         mapping = m;
     }
 
     public EveMappingObject(Pair<String, EveObject>... ps) {
         Mapping<EveObject> m = new Mapping<EveObject>();
-        for (Pair<String, EveObject> pair: ps) {
+        for (Pair<String, EveObject> pair : ps) {
             m.put(pair.first, pair.second);
         }
         mapping = m;
@@ -32,7 +31,7 @@ public class EveMappingObject implements EveStructuredObject {
 
     @Override
     public String getType() {
-        return get(EveObject.TYPE_KEY).collect(new Matcher.SimpleMatcher<EveStringObject, String>(EveStringObject.class, new Transformer<EveStringObject, String>() {
+        return get(EveObject.TYPE_KEY).gather(new Matcher.SimpleMatcher<EveStringObject, String>(EveStringObject.class, new Transformer<EveStringObject, String>() {
             @Override
             public String apply(EveStringObject eveStringObject) {
                 return eveStringObject.getValue();
@@ -67,6 +66,11 @@ public class EveMappingObject implements EveStructuredObject {
 
     @Override
     public boolean setState(String field, String value) {
+        return false;
+    }
+
+    @Override
+    public boolean call(IAction action) {
         return false;
     }
 }

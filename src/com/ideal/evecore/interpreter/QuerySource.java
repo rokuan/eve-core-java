@@ -9,6 +9,7 @@ import com.ideal.evecore.util.Option;
 public interface QuerySource {
     /**
      * Finds an item by its id
+     *
      * @param id The object's id
      * @return The object with this id
      */

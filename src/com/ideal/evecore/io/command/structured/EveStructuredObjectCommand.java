@@ -17,7 +17,8 @@ import static com.ideal.evecore.io.command.structured.EveStructuredObjectCommand
         @Type(name = HAS_FIELD, value = HasFieldCommand.class),
         @Type(name = GET_STATE, value = GetStateCommand.class),
         @Type(name = SET_STATE, value = SetStateCommand.class),
-        @Type(name = HAS_STATE, value = HasStateCommand.class)
+        @Type(name = HAS_STATE, value = HasStateCommand.class),
+        @Type(name = CALL_ACTION, value = CallActionCommand.class)
 })
 public interface EveStructuredObjectCommand {
     public static final String GET_TYPE = "GTYP";
@@ -27,4 +28,5 @@ public interface EveStructuredObjectCommand {
     public static final String GET_STATE = "GSTE";
     public static final String SET_STATE = "SSTE";
     public static final String HAS_STATE = "HSTE";
+    public static final String CALL_ACTION = "CACT";
 }

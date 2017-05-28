@@ -5,18 +5,27 @@ package com.ideal.evecore.util;
  */
 public abstract class Option<T> {
     abstract public boolean isEmpty();
+
     abstract public boolean isDefined();
+
     abstract public T get();
+
     abstract public T getOrElse(T other);
+
     abstract public T orNull();
-    abstract public <R> Option<R> map(Transformer<T, R> transformer);
-    abstract public void foreach(Handler<T> handler);
+
+    abstract public <R> Option<R> transform(Transformer<T, R> transformer);
+
+    abstract public void handle(Handler<T> handler);
+
     abstract public Option<T> filter(Predicate<T> predicate);
+
     abstract public boolean exists(Predicate<T> predicate);
-    abstract public <M extends T, O> Option<O> collect(Matcher<M, ? extends O>... matchers);
+
+    abstract public <M extends T, O> Option<O> gather(Matcher<M, ? extends O>... matchers);
 
     static public <T> Option<T> apply(T t) {
-        if(t == null){
+        if (t == null) {
             return new None<T>();
         } else {
             return new Some<T>(t);
@@ -30,7 +39,7 @@ public abstract class Option<T> {
     static public class Some<T> extends Option<T> {
         private T value;
 
-        public Some(T t){
+        public Some(T t) {
             value = t;
         }
 
@@ -60,12 +69,12 @@ public abstract class Option<T> {
         }
 
         @Override
-        public <R> Option<R> map(Transformer<T, R> transformer) {
+        public <R> Option<R> transform(Transformer<T, R> transformer) {
             return new Some<R>(transformer.apply(value));
         }
 
         @Override
-        public void foreach(Handler<T> handler) {
+        public void handle(Handler<T> handler) {
             handler.apply(value);
         }
 
@@ -80,8 +89,8 @@ public abstract class Option<T> {
         }
 
         @Override
-        public <M extends T, O> Option<O> collect(Matcher<M, ? extends O>... matchers) {
-            for(Matcher<M, ? extends O> matcher: matchers){
+        public <M extends T, O> Option<O> gather(Matcher<M, ? extends O>... matchers) {
+            for (Matcher<M, ? extends O> matcher : matchers) {
                 try {
                     return new Some<O>(matcher.getIfMatches(value));
                 } catch (Matcher.NoMatchException e) {
@@ -119,12 +128,12 @@ public abstract class Option<T> {
         }
 
         @Override
-        public <R> Option<R> map(Transformer<T, R> transformer) {
+        public <R> Option<R> transform(Transformer<T, R> transformer) {
             return new None<R>();
         }
 
         @Override
-        public void foreach(Handler<T> handler) {
+        public void handle(Handler<T> handler) {
 
         }
 
@@ -139,7 +148,7 @@ public abstract class Option<T> {
         }
 
         @Override
-        public <M extends T, O> Option<O> collect(Matcher<M, ? extends O>... matchers) {
+        public <M extends T, O> Option<O> gather(Matcher<M, ? extends O>... matchers) {
             return new None<O>();
         }
     }

@@ -12,6 +12,7 @@ import com.ideal.evecore.io.serialization.EveObjectSerialization;
 import com.ideal.evecore.util.Conversions;
 import com.ideal.evecore.util.Option;
 import com.ideal.evecore.util.Result;
+import com.rokuan.calliopecore.sentence.IAction;
 
 import java.io.IOException;
 
@@ -126,6 +127,18 @@ public class RemoteEveStructuredObject implements EveStructuredObject {
     public boolean setState(String field, String value) {
         try {
             UserCommand command = getCommand(new SetStateCommand(field, value));
+            return handler.booleanOperation(command, mapper);
+        } catch (IOException e) {
+            return false;
+        } catch (InterruptedException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean call(IAction action) {
+        try {
+            UserCommand command = getCommand(new CallActionCommand(action));
             return handler.booleanOperation(command, mapper);
         } catch (IOException e) {
             return false;

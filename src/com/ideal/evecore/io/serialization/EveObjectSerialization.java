@@ -35,9 +35,9 @@ public class EveObjectSerialization {
             if (eveObject instanceof EveNoneObject) {
                 jsonGenerator.writeString(EveNoneObject.NONE_LABEL);
             } else if (eveObject instanceof EveStringObject) {
-                jsonGenerator.writeString(((EveStringObject)eveObject).getValue());
+                jsonGenerator.writeString(((EveStringObject) eveObject).getValue());
             } else if (eveObject instanceof EveNumberObject) {
-                Number value = ((EveNumberObject)eveObject).getValue();
+                Number value = ((EveNumberObject) eveObject).getValue();
 
                 if (value.doubleValue() == value.intValue()) {
                     jsonGenerator.writeNumber(value.intValue());
@@ -64,7 +64,7 @@ public class EveObjectSerialization {
                 jsonGenerator.writeStartObject();
                 jsonGenerator.writeStringField("type", EveStructuredObjectCategory.REMOTE.name());
                 jsonGenerator.writeStringField(EveObject.DOMAIN_KEY, domainId);
-                jsonGenerator.writeStringField(EveObject.ID_KEY, ((EveQueryObject)eveObject).getId());
+                jsonGenerator.writeStringField(EveObject.ID_KEY, ((EveQueryObject) eveObject).getId());
                 jsonGenerator.writeEndObject();
             } else if (eveObject instanceof EveMappingObject) {
                 jsonGenerator.writeStartObject();
@@ -90,13 +90,13 @@ public class EveObjectSerialization {
     public static class EveObjectDeserializer extends JsonDeserializer<EveObject> {
         private final StreamHandler handler;
 
-        public EveObjectDeserializer(StreamHandler h){
+        public EveObjectDeserializer(StreamHandler h) {
             handler = h;
         }
 
         @Override
         public EveObject deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-            switch(jsonParser.getCurrentToken()){
+            switch (jsonParser.getCurrentToken()) {
                 case VALUE_STRING:
                     String value = jsonParser.getText();
                     if (EveNoneObject.NONE_LABEL.equals(value)) {
@@ -119,7 +119,7 @@ public class EveObjectSerialization {
                     String domainId = "";
                     String objectId = "";
 
-                    while(jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                    while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                         String field = jsonParser.getCurrentName();
 
                         if ("type".equals(field)) {
@@ -130,7 +130,7 @@ public class EveObjectSerialization {
                             }
                         } else if ("value".equals(field)) {
                             jsonParser.nextToken(); // to dismiss JsonToken.START_OBJECT
-                            while(jsonParser.nextToken() != JsonToken.END_OBJECT){
+                            while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                                 String attribute = jsonParser.getCurrentName();
                                 values.put(attribute, deserialize(jsonParser, deserializationContext));
                             }
@@ -143,7 +143,7 @@ public class EveObjectSerialization {
                         }
                     }
 
-                    switch(category){
+                    switch (category) {
                         case MAPPING:
                             return new EveMappingObject(values);
                         case REMOTE:
@@ -153,7 +153,7 @@ public class EveObjectSerialization {
                     return new EveMappingObject(values);
                 case START_ARRAY:
                     List<EveObject> elements = new ArrayList<EveObject>();
-                    while(jsonParser.nextToken() != JsonToken.END_ARRAY){
+                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
                         elements.add(deserialize(jsonParser, deserializationContext));
                     }
                     return new EveObjectList(elements);

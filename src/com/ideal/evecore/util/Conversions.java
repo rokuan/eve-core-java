@@ -5,7 +5,7 @@ package com.ideal.evecore.util;
  */
 public class Conversions {
     public static <T> Result<T> toResult(Option<T> o) {
-        return o.map(new Transformer<T, Result<T>>() {
+        return o.transform(new Transformer<T, Result<T>>() {
             @Override
             public Result<T> apply(T t) {
                 return Result.ok(t);

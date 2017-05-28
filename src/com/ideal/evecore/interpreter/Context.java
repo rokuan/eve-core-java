@@ -10,6 +10,7 @@ import com.ideal.evecore.util.Option;
 public interface Context {
     /**
      * Finds a single item that matches the type in this context
+     *
      * @param type The type to query
      * @return An option containing the result if any
      */
@@ -17,6 +18,7 @@ public interface Context {
 
     /**
      * Queries all the items that match the type in this context
+     *
      * @param type The type to query
      * @return An option containing the results if any
      */

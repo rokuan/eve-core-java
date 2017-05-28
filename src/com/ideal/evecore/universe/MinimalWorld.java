@@ -42,10 +42,10 @@ public class MinimalWorld implements World {
 
     @Override
     public Option<Receiver> findReceiver(EveStructuredObject o) {
-        for (Receiver r: receivers.values()) {
+        for (Receiver r : receivers.values()) {
             Mapping<ValueMatcher> matchers = r.getMappings();
             boolean found = true;
-            for (final Map.Entry<String, ValueMatcher> entry: matchers.entrySet()) {
+            for (final Map.Entry<String, ValueMatcher> entry : matchers.entrySet()) {
                 Predicate<EveObject> valueMatches = new Predicate<EveObject>() {
                     @Override
                     public boolean matches(EveObject eveObject) {

@@ -44,6 +44,7 @@ public class StreamContext extends ObjectStreamSource implements Context {
 
     /**
      * Calls the underlying context's method
+     *
      * @param command
      * @param source
      * @throws IOException
@@ -60,7 +61,7 @@ public class StreamContext extends ObjectStreamSource implements Context {
             Result<EveStructuredObject> result = Conversions.toResult(item);
             source.writeResultResponse(mapper, result);
         } else if (command instanceof ObjectCommand) {
-            handleObjectCommand((ObjectCommand)command, source);
+            handleObjectCommand((ObjectCommand) command, source);
         }
     }
 

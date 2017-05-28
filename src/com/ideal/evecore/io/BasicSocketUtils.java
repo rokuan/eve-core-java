@@ -21,13 +21,14 @@ public abstract class BasicSocketUtils {
 
     /**
      * Writes an integer size in little-endian on 4 bytes
+     *
      * @param size The size to write
      * @throws IOException
      */
     private final void writeSize(int size) throws IOException {
         byte[] sizeData = new byte[4];
-        for(int i=0; i<sizeData.length; i++){
-            sizeData[i] = (byte)((size >> (i * 8)) & 0xFF);
+        for (int i = 0; i < sizeData.length; i++) {
+            sizeData[i] = (byte) ((size >> (i * 8)) & 0xFF);
         }
         os.write(sizeData);
         os.flush();
@@ -35,6 +36,7 @@ public abstract class BasicSocketUtils {
 
     /**
      * Writes a single bit representing a boolean value
+     *
      * @param b
      * @throws IOException
      */
@@ -45,6 +47,7 @@ public abstract class BasicSocketUtils {
 
     /**
      * Writes a string value by first sending its size, and then its bytes
+     *
      * @param b
      * @throws IOException
      */
@@ -56,6 +59,7 @@ public abstract class BasicSocketUtils {
 
     /**
      * Reads a little-endian-formatted size from the input stream
+     *
      * @return The size that has been read
      * @throws IOException
      */
@@ -63,7 +67,7 @@ public abstract class BasicSocketUtils {
         byte[] data = new byte[4];
         if (is.read(data) == 4) {
             int sum = 0;
-            for(int i=0; i<data.length; i++){
+            for (int i = 0; i < data.length; i++) {
                 sum += ((data[i] & 0xFF) << (i * 8));
             }
             return sum;
@@ -73,6 +77,7 @@ public abstract class BasicSocketUtils {
 
     /**
      * Reads a text from the input stream
+     *
      * @return The read text
      * @throws IOException
      */
@@ -97,6 +102,7 @@ public abstract class BasicSocketUtils {
 
     /**
      * Reads a single byte and convert it into a boolean
+     *
      * @return The boolean value of the read byte
      * @throws IOException
      */

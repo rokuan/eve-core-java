@@ -14,7 +14,7 @@ public class Mapping<T> extends HashMap<String, T> {
     }
 
     public Mapping(Pair<String, T>... pairs) {
-        for (Pair<String, T> entry: pairs) {
+        for (Pair<String, T> entry : pairs) {
             put(entry.first, entry.second);
         }
     }

@@ -6,11 +6,11 @@ package com.ideal.evecore.interpreter.data;
 public final class EveStringObject implements EveObject {
     private String value;
 
-    public EveStringObject(String s){
+    public EveStringObject(String s) {
         value = s;
     }
 
-    public String getValue(){
+    public String getValue() {
         return value;
     }
 }

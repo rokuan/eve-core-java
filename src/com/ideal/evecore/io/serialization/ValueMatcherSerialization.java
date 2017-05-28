@@ -41,7 +41,7 @@ public class ValueMatcherSerialization {
             } else if (matcher instanceof ObjectValueMatcher) {
                 ObjectValueMatcher objectMatcher = (ObjectValueMatcher) matcher;
                 jsonGenerator.writeStartObject();
-                for (Map.Entry<String, ValueMatcher> entry: objectMatcher.getValues().entrySet()) {
+                for (Map.Entry<String, ValueMatcher> entry : objectMatcher.getValues().entrySet()) {
                     jsonGenerator.writeFieldName(entry.getKey());
                     serialize(entry.getValue(), jsonGenerator, serializerProvider);
                 }
