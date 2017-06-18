@@ -21,6 +21,7 @@ public class ActionSerialization {
             boolean fieldBound = action.isFieldBound();
             boolean stateBound = action.isStateBound();
             IAction.ActionType actionValue = action.getAction();
+            boolean target = action.isTargetAction();
 
             jsonGenerator.writeStartObject();
             jsonGenerator.writeStringField("action", actionValue != null ? actionValue.name() : null);
@@ -33,6 +34,7 @@ public class ActionSerialization {
                 jsonGenerator.writeStringField("state", action.getBoundState());
                 jsonGenerator.writeStringField("state_value", action.getState());
             }
+            jsonGenerator.writeBooleanField("is_target", target);
             jsonGenerator.writeEndObject();
         }
     }
@@ -61,7 +63,9 @@ public class ActionSerialization {
                     jsonParser.nextFieldName(); // STATE_VALUE
                     stateValue = jsonParser.nextTextValue();
                 }
-                return new Action(actionValue, fieldBound, field, stateBound, state, stateValue);
+                jsonParser.nextFieldName(); // IS_TARGET
+                boolean target = jsonParser.nextBooleanValue();
+                return new Action(actionValue, fieldBound, field, stateBound, state, stateValue, target);
             }
             return null;
         }
@@ -74,14 +78,16 @@ public class ActionSerialization {
         private final boolean stateBound;
         private final String state;
         private final String stateValue;
+        private final boolean target;
 
-        public Action(ActionType a, boolean fBound, String f, boolean sBound, String s, String sValue) {
+        public Action(ActionType a, boolean fBound, String f, boolean sBound, String s, String sValue, boolean t) {
             action = a;
             fieldBound = fBound;
             field = f;
             stateBound = sBound;
             state = s;
             stateValue = sValue;
+            target = t;
         }
 
         @Override
@@ -97,6 +103,11 @@ public class ActionSerialization {
         @Override
         public Tense getTense() {
             return null;
+        }
+
+        @Override
+        public boolean isTargetAction() {
+            return target;
         }
 
         @Override

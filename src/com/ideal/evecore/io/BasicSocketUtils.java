@@ -52,8 +52,9 @@ public abstract class BasicSocketUtils {
      * @throws IOException
      */
     protected void writeValue(String s) throws IOException {
-        writeSize(s.length());
-        os.write(s.getBytes());
+        byte[] data = s.getBytes();
+        writeSize(data.length);
+        os.write(data);
         os.flush();
     }
 

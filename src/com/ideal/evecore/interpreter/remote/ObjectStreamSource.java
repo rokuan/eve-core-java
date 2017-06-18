@@ -71,7 +71,7 @@ public abstract class ObjectStreamSource implements QuerySource {
                 boolean has = (o != null) ? o.hasState(field) : false;
                 source.writeBooleanResponse(has);
             } else if (objectCommand instanceof CallActionCommand) {
-                IAction.ActionType action = ((CallActionCommand) objectCommand).getAction();
+                IAction action = ((CallActionCommand) objectCommand).getAction();
                 boolean returnedValue = (o != null) ? o.call(action) : false;
                 source.writeBooleanResponse(returnedValue);
             }
